@@ -1,0 +1,37 @@
+{
+  "name": "racq",
+  "version": "0.0.1",
+  "description": "Rackspace Cloud Queues API wrapper",
+  "author": "Guy Vider",
+  "main": "./lib/queue.js",
+  "scripts": {
+    "test": "mocha -c -R spec -t 5000 test/test.js"
+  },
+  "keywords": [
+    "rackspace",
+    "queue",
+    "cloud",
+    "api"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/travelingtechguy/racq",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/travelingtechguy/racq.git"
+  },
+  "bugs": {
+    "url": "https://github.com/travelingtechguy/racq/issues"
+  },
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "async": "^0.9.0",
+    "debug": "^0.8.1",
+    "guid": "0.0.12",
+    "lodash": "^2.4.1",
+    "request": "^2.36.0"
+  },
+  "devDependencies": {
+    "mocha": "^1.20.1",
+    "should": "^4.0.1"
+  }
+}
