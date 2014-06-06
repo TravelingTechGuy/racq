@@ -14,6 +14,11 @@ describe('Queue', function() {
 	}
 
 	describe('Authentication', function() {
+		it('client id should be a GUID', function() {
+			var q = new Queue();
+			q.getClientId().should.match(/^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/);
+		});
+		
 		it('should authenticate user with parameters', function(done) {
 			var q = new Queue();
 			q.authenticate(config.userName, config.apiKey, done);
@@ -32,11 +37,6 @@ describe('Queue', function() {
 					done();
 				}
 			});
-		});
-
-		it('client id should be a GUID', function() {
-			var q = new Queue();
-			q._clientId.should.match(/^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/);
 		});
 	});
 });
