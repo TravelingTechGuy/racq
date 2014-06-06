@@ -1,0 +1,5 @@
+{
+	"authUrl": "https://identity.api.rackspacecloud.com/v2.0/tokens",
+	"queueUrl": "https://REGION.queues.api.rackspacecloud.com/v1/queues",
+	"defaultRegion": "dfw"
+}
