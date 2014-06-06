@@ -1,49 +1,43 @@
 'use strict';
 
-var Queue = require('../lib/queue'),
-	fs = require('fs'),
-	should = require('should'),
-	debug = require('debug'),
-	config = require('../config'),
-	tokenPath = __dirname + '/token.json';
+/**
+* Test Runner
+* Allows running all tests in either the top, or the /test folder
+* Run all tests by executing `node test/test.js`
+* Run specific test/s by executing `node test/test.js <file1> <file2>`
+*    - <file1.js> etc must be under the /test folder
+**/
 
-describe('Queue', function() {
-	describe('Operations', function() {
-		var options = {
-				userName: config.userName,
-				apiKey: config.apiKey,
-				persistedTokenPath: tokenPath
-			},
-			q = new Queue(options);
-		
-		it('should return list of available queues', function(done) {
-			q.authenticate(function(err) {
-				if(!err) {
-					q.listQueues(function(error, queues) {
-						if(!error) {
-							debug('%s queues found', queues.length);
-							done();
-						}
-					});
-				}
-			});
-		});
 
-		var queueName = 'demoQueue' + Math.floor(Math.random() * 9000 + 1000);
-		it('should create a queue named ' + queueName, function(done) {
-			q.createQueue(queueName, done);
-		});
+var fs = require('fs'),
+	path = require('path'),
+	Mocha = require('mocha'),
+	mocha = new Mocha({
+		reporter: 'spec',
+		timeout: 5000,
+		slow: 2000
+	}),
+	cwd = process.cwd() + (process.cwd().split('/').pop() !== 'test' ? '/test' : '');
 
-		it('should check the existence of a queue named ' + queueName, function(done) {
-			q.queueExists(queueName, function(error, exists) {
-				if(!error && exists) {
-					done();
-				}
-			});
-		});
+if(process.argv.length > 2) {
+	for(var i = 2; i < process.argv.length; i++) {
+		var file = process.argv[i] + (process.argv[i].substr(-3) === '.js' ? '' : '.js');
+		mocha.addFile(path.join(cwd, file));
+	}
+}
+else {
+	var currentFile = __filename.split('/').pop(),
+		skipFiles = [currentFile];
+	fs.readdirSync(cwd).filter(function(file) {
+		return (file.substr(-3) === '.js') && (skipFiles.indexOf(file) === -1);
+	}).forEach(function(file) {
+		console.log(file);
+		mocha.addFile(path.join(cwd, file));
+	});
+}
 
-		// it('should delete the queue ' + queueName, function(done) {
-		// 	q.deleteQueue(queueName, done);
-		// });		
+mocha.run(function(failures) {
+	process.on('exit', function() {
+		process.exit(failures);
 	});
 });

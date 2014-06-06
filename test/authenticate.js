@@ -4,7 +4,7 @@ var Queue = require('../lib/queue'),
 	fs = require('fs'),
 	should = require('should'),
 	debug = require('debug'),
-	config = require('../config'),
+	config = require('./testConfig'),
 	tokenPath = __dirname + '/token.json';
 
 describe('Queue', function() {
@@ -20,21 +20,13 @@ describe('Queue', function() {
 		});
 
 		it('should authenticate user with options', function(done) {
-			var options = {
-					userName: config.userName,
-					apiKey: config.apiKey
-				},
-				q = new Queue(options);
+			var q = new Queue(config);
 			q.authenticate(done);
 		});
 		
 		it('should authenticate user and persist token', function(done) {
-			var options = {
-					userName: config.userName,
-					apiKey: config.apiKey,
-					persistedTokenPath: tokenPath
-				},
-				q = new Queue(options);
+			config.persistedTokenPath = tokenPath;
+			var q = new Queue(config);
 			q.authenticate(config.userName, config.apiKey, function(error) {
 				if(!error && fs.existsSync(tokenPath)) {
 					done();
@@ -44,7 +36,7 @@ describe('Queue', function() {
 
 		it('client id should be a GUID', function() {
 			var q = new Queue();
-			q.getClientId().should.match(/^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/);
+			q._clientId.should.match(/^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/);
 		});
 	});
 });
