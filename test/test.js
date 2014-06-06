@@ -10,6 +10,7 @@
 
 var fs = require('fs'),
 	path = require('path'),
+	debug = require('debug')('test'),
 	Mocha = require('mocha'),
 	mocha = new Mocha({
 		reporter: 'spec',
@@ -17,6 +18,12 @@ var fs = require('fs'),
 		slow: 2000
 	});
 
+/**
+ * Add test files to be run.
+ * Files can either be supplied in command line, or will be taken from /test directory
+ * Only .js files will be included.
+ * File names to be skipped should be added to the skipFiles array (by default contains local file)
+ */
 var addFiles = function() {
 	var cwd = process.cwd() + (process.cwd().split('/').pop() !== 'test' ? '/test' : '');
 	if(process.argv.length > 2) {
@@ -31,19 +38,19 @@ var addFiles = function() {
 		fs.readdirSync(cwd).filter(function(file) {
 			return (file.substr(-3) === '.js') && (skipFiles.indexOf(file) === -1);
 		}).forEach(function(file) {
-			console.log(file);
+			debug('%s added to tests', file);
 			mocha.addFile(path.join(cwd, file));
 		});
 	}
 };
 
-var runTests = function() {
+(function() {
+	debug('Adding test files');
+	addFiles();
+	debug('Running tests');
 	mocha.run(function(failures) {
 		process.on('exit', function() {
 			process.exit(failures);
 		});
 	});
-};
-
-addFiles();
-runTests();
+}());
