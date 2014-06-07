@@ -3,15 +3,17 @@
 var Queue = require('../lib/queue'),
 	fs = require('fs'),
 	should = require('should'),
-	debug = require('debug'),
+	debug = require('debug')('authenticate'),
 	config = require('./testConfig'),
 	tokenPath = __dirname + '/token.json';
 
 describe('Authentication', function() {
-	//delete persisted token if exists
-	if(fs.existsSync(tokenPath)) {
-		fs.unlinkSync(tokenPath);
-	}
+	before(function() {
+		//delete persisted token if exists, to force actual authentication
+		if(fs.existsSync(tokenPath)) {
+			fs.unlinkSync(tokenPath);
+		}
+	});
 
 	it('client id should be a GUID', function() {
 		var q = new Queue();
