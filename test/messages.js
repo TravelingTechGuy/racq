@@ -1,6 +1,7 @@
 'use strict';
 
-var Queue = require('../lib/queue'),
+var util = require('util'),
+	Queue = require('../lib/queue'),
 	should = require('should'),
 	debug = require('debug')('messages');
 
@@ -12,7 +13,7 @@ describe('Messages operations', function() {
 			ttl: 60,
 			body: {myProperty: 'myValue'}
 		}],
-		msgId;
+		msgId = 'xxx';
 	
 	config.persistedTokenPath = tokenPath;
 	var q = new Queue(config);	
@@ -29,15 +30,26 @@ describe('Messages operations', function() {
 		q.putMessages(queueName, message, done);
 	});
 
-	it('should get the message from queue ' + queueName, function(done) {
+	it('should get messages from queue ' + queueName, function(done) {
 		var options = {
 			limit: 1,
 			echo: true
 		};
 		q.getMessages(queueName, options, function(error, messages) {
+			debug(util.inspect(messages, true, 3));
 			if(!error && messages.messages.length === 1 && messages.messages[0].body.myProperty === message[0].body.myProperty) {
 				msgId = messages.messages[0].href.split('/').pop();
 				debug(msgId);
+				done();
+			}
+		});
+	});
+
+	it('should get the message ' + msgId + ' from queue ' + queueName, function(done) {
+		debug(msgId);
+		q.getMessagesById(queueName, msgId, function(error, messages) {
+			debug(util.inspect(messages, true, 3));
+			if(!error && messages.body.myProperty === message[0].body.myProperty) {
 				done();
 			}
 		});
