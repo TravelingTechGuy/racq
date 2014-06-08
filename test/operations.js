@@ -1,26 +1,27 @@
 'use strict';
 
-var Queue = require('../lib/queue'),
-	should = require('should'),
+var should = require('should'),
 	debug = require('debug')('opertions'),
-	config = require('./testConfig'),
-	tokenPath = __dirname + '/token.json',
-	queueName = 'demoQueue' + Math.floor(Math.random() * 9000 + 1000);
+	Queue = require('../lib/queue');
 
 describe('Queue operations', function() {
-	config.persistedTokenPath = tokenPath;
-	var q = new Queue(config);	
+	var queueName = 'demoQueue' + Math.floor(Math.random() * 9000 + 1000),
+		q;	
 	
 	before(function(done) {
+		var config = require('./testConfig'),
+			tokenPath = __dirname + '/token.json';
+
+		config.persistedTokenPath = tokenPath;
+		q = new Queue(config);
 		q.authenticate(done);
 	});
 
 	it('should return list of available queues', function(done) {
 		q.listQueues(function(error, queues) {
-			if(!error) {
-				debug('%s queues found', queues.length);
-				done();
-			}
+			should.not.exist(error);
+			debug('%s queues found', queues.length);
+			done();
 		});
 	});
 
@@ -30,17 +31,18 @@ describe('Queue operations', function() {
 
 	it('should check the existence of a queue named ' + queueName, function(done) {
 		q.queueExists(queueName, function(error, exists) {
-			if(!error && exists) {
-				done();
-			}
+			should.not.exist(error);
+			should.exist(exists);
+			done();
 		});
 	});
 
 	it('should get the stats of a queue named ' + queueName, function(done) {
 		q.getQueueStats(queueName, function(error, stats) {
-			if(!error && stats !== null) {
-				done();
-			}
+			should.not.exist(error);
+			should.exist(stats);
+			debug(stats);
+			done();
 		});
 	});
 
@@ -51,9 +53,10 @@ describe('Queue operations', function() {
 
 	it('should get metadata from queue ' + queueName, function(done) {
 		q.getQueueMetadata(queueName, function(error, data) {
-			if(!error && data.myProperty === metadata.myProperty) {
-				done();
-			}
+			should.not.exist(error);
+			should.exist(data);
+			data.myProperty.should.eql(metadata.myProperty);
+			done();
 		});
 	});
 

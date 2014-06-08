@@ -1,24 +1,25 @@
 'use strict';
 
 var util = require('util'),
-	Queue = require('../lib/queue'),
 	should = require('should'),
-	debug = require('debug')('messages');
+	debug = require('debug')('messages'),
+	Queue = require('../lib/queue');
 
 describe('Messages operations', function() {
-	var config = require('./testConfig'),
-		tokenPath = __dirname + '/token.json',
-		queueName = 'demoQueue' + Math.floor(Math.random() * 9000 + 1000),
+	var queueName = 'demoQueue' + Math.floor(Math.random() * 9000 + 1000),
 		message = {
 			ttl: 60,
 			body: {myProperty: 'myValue'}
 		},
-		msgId = 'xxx';
-	
-	config.persistedTokenPath = tokenPath;
-	var q = new Queue(config);	
+		q,
+		msgId;
 	
 	before(function(done) {
+		var config = require('./testConfig'),
+			tokenPath = __dirname + '/token.json';
+		
+		config.persistedTokenPath = tokenPath;
+		q = new Queue(config);	
 		q.authenticate(function(error) {
 			if(!error) {
 				q.createQueue(queueName, done);
@@ -37,25 +38,25 @@ describe('Messages operations', function() {
 		};
 		q.getMessages(queueName, options, function(error, result) {
 			debug(util.inspect(result, true, 3));
-			if(!error && result.messages.length === 1 && result.messages[0].body.myProperty === message.body.myProperty) {
-				msgId = result.messages[0].id;
-				debug(msgId);
-				done();
-			}
+			should.not.exist(error);
+			should.exist(result);
+			result.messages[0].body.myProperty.should.eql(message.body.myProperty);
+			msgId = result.messages[0].id;
+			done();
 		});
 	});
 
-	it('should get the message ' + msgId + ' from queue ' + queueName, function(done) {
+	it('should get the message from queue ' + queueName, function(done) {
 		debug(msgId);
 		q.getMessagesById(queueName, msgId, function(error, result) {
-			debug(util.inspect(result, true, 3));
-			if(!error && result.body.myProperty === message.body.myProperty) {
-				done();
-			}
+			should.not.exist(error);
+			should.exist(result);
+			result.body.myProperty.should.eql(message.body.myProperty);
+			done();
 		});
 	});
 	
-	it('should delete message ' + msgId + ' from queue ' + queueName, function(done) {
+	it('should delete message from queue ' + queueName, function(done) {
 		debug(msgId);
 		q.deleteMessage(queueName, msgId, done);
 	});

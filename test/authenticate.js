@@ -1,9 +1,9 @@
 'use strict';
 
-var Queue = require('../lib/queue'),
-	fs = require('fs'),
+var fs = require('fs'),
 	should = require('should'),
 	debug = require('debug')('authenticate'),
+	Queue = require('../lib/queue'),
 	config = require('./testConfig'),
 	tokenPath = __dirname + '/token.json';
 
