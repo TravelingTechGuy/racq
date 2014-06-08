@@ -27,7 +27,7 @@ describe('Messages operations', function() {
 	});
 
 	it('should put message to queue ' + queueName, function(done) {
-		q.putMessages(queueName, [message], done);
+		q.putMessages(queueName, message, done);
 	});
 
 	it('should get messages from queue ' + queueName, function(done) {
