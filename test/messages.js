@@ -12,7 +12,7 @@ describe('Messages operations', function() {
 			body: {myProperty: 'myValue'}
 		},
 		q,
-		msgId;
+		msgId, msgIds = [];
 	
 	before(function(done) {
 		var config = require('./testConfig'),
@@ -61,7 +61,7 @@ describe('Messages operations', function() {
 		q.deleteMessage(queueName, msgId, done);
 	});
 
-	it('should post 20 messages to queue ' + queueName + ' and read them back in 4 groups of 5 messages', function(done) {
+	it('should post 20 messages to queue ' + queueName + ' and get them in groups of 5 messages', function(done) {
 		var async = require('async');
 		async.series([
 			function postMessages(callback) {
@@ -101,7 +101,8 @@ describe('Messages operations', function() {
 								//debug(util.inspect(result, true, 3));
 								result.messages.forEach(function(message) {
 									messageCount++;
-									sum += parseInt(message.body.number); 
+									sum += parseInt(message.body.number);
+									msgIds.push(message.id);
 								});
 								next = result.marker;
 								debug('sum: %s, next marker: %s', sum, next);
@@ -121,6 +122,10 @@ describe('Messages operations', function() {
 			}
 		], 
 		done);
+	});
+
+	it('should bulk delete 20 messages from queue ' + queueName, function(done) {
+		q.deleteMessage(queueName, msgIds.join(','), done);
 	});
 
 	after(function(done) {
