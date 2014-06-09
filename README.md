@@ -34,7 +34,7 @@ myQ.authenticate(function(error) {
 		myQ.createQueue(queueName, function(error) {
 			if(!error) {
 				console.log('queue %s created', queueName);
-				myQ.putMessages(queueName, , function(error) {
+				myQ.putMessages(queueName, message, function(error) {
 					if(!error) {
 						console.log('posted my first message to %s!', queueName);
 						myQ.deleteQueue(queueName, function(error) {
