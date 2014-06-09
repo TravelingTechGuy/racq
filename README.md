@@ -2,17 +2,13 @@
 This module is a Node.js wrapper for the Rackspace Cloud Queues API.
 
 ##Rackspace Cloud Queues
-Cloud queues are scalable message queues, built on Rackspace's scalable cloud platform. They can be used in either pub-sub or producer-consumer configurations. You can read more about them on  
-* [the Rackspace site](http://www.rackspace.com/cloud/queues/)
-* [full documentation of the API](http://docs.rackspace.com/queues/api/v1.0/cq-devguide/content/overview.html) 
-
-###Pricing
-Currently (6/2014) you get **free** unlimited queues, unlimited messages (at max 256kb/msg), and 1 million API calls a month.  
-A $0.01 per 10,000 API requests fee after the first million calls, and a standard bandwidth charges apply.
+Cloud queues are scalable message queues, built on Rackspace's scalable cloud platform. They can be used in either pub-sub or producer-consumer configurations. You can read more about them on:  
+* [The Rackspace site](http://www.rackspace.com/cloud/queues/) - info and pricing
+* [Full documentation of the API](http://docs.rackspace.com/queues/api/v1.0/cq-devguide/content/overview.html)
 
 ##Quick start
-1. Install the module into your project: `npm install racq` or clone [this repository](https://github.com/travelingtechguy/racq.git)
-2. Install all dependency modules: `npm install`
+1. Install the module into your project: `npm install racq`
+2. Alternatively, clone [this repository](https://github.com/travelingtechguy/racq.git) and install all dependency modules: `npm install`
 2. Use the following code, providing your credentials and preferred region:
 
 ```
