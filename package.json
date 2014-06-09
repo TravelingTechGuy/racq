@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Rackspace Cloud Queues API wrapper",
   "author": "Guy Vider",
-  "main": "./lib/queue.js",
+  "main": "./lib/racq.js",
   "scripts": {
     "test": "node test.js"
   },
