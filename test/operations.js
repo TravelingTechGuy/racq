@@ -2,7 +2,7 @@
 
 var should = require('should'),
 	debug = require('debug')('opertions'),
-	Queue = require('../lib/queue');
+	RacQ = require('../lib/racq');
 
 describe('Queue operations', function() {
 	var queueName = 'demoQueue' + Math.floor(Math.random() * 9000 + 1000),
@@ -13,7 +13,7 @@ describe('Queue operations', function() {
 			tokenPath = __dirname + '/token.json';
 
 		config.persistedTokenPath = tokenPath;
-		q = new Queue(config);
+		q = new RacQ(config);
 		q.authenticate(done);
 	});
 
