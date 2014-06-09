@@ -33,3 +33,12 @@ myQ.authenticate(function(error) {
 	}
 });
 ```
+
+##Available methods
+###Authentication
+
+###Queue operations
+
+###Message operations
+
+###Claims operations
