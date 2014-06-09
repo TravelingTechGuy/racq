@@ -11,8 +11,8 @@ Currently (6/2014) you get **free** unlimited queues, unlimited messages (at max
 A $0.01 per 10,000 API requests fee after the first million calls, and a standard bandwidth charges apply.
 
 ##Quick start
-1. Install the module into your project: `npm install racq`
-2. You can also clone [this repository](https://github.com/travelingtechguy/racq.git)
+1. Install the module into your project: `npm install racq` or clone [this repository](https://github.com/travelingtechguy/racq.git)
+2. Install all dependency modules: `npm install`
 2. Use the following code, providing your credentials and preferred region:
 ```
 var Queue = require('racq'),
@@ -77,3 +77,23 @@ If `persistedTokenPath` has been provided to constructor, the auth token will be
 
 ###Claims operations
 **TBD**
+
+##Tests
+1. To run tests, first, create a file called `testConfig.json` in the `/test` folder, containing the following:
+```
+{
+	"userName": "Your User Name",
+	"apiKey": "Your API Key",
+	"region": "dfw"
+}
+```
+2. In the top folder, run the command `npm test` to have all tests run.
+3. To run a specific set of tests, run this command at the top level:
+`node test authenticate` (you can provide any of the test files available under `/test`).
+4. Alternatively, you can run `mocha test/authenticate` if you'd like to provide mocha specific parameters (see [mocha](https://github.com/visionmedia/mocha) for more documenation).
+5. If you want to see debug messages from tests, or modules, provide the `DEBUG` parameter, and the module name, at the beginning of the line:
+`DEBUG=racq,authenticate npm test`.
+
+## License
+Copyright (c) 2014 Guy Vider, Traveling Tech Guy LLC
+Licensed under the MIT license.

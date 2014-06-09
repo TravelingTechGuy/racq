@@ -25,7 +25,7 @@ var fs = require('fs'),
  * File names to be skipped should be added to the skipFiles array (by default contains local file)
  */
 var addFiles = function() {
-	var cwd = process.cwd() + (process.cwd().split('/').pop() !== 'test' ? '/test' : '');
+	var cwd = process.cwd() + '/test/';
 	if(process.argv.length > 2) {
 		for(var i = 2; i < process.argv.length; i++) {
 			var file = process.argv[i] + (process.argv[i].substr(-3) === '.js' ? '' : '.js');
@@ -33,8 +33,7 @@ var addFiles = function() {
 		}
 	}
 	else {
-		var currentFile = __filename.split('/').pop(),
-			skipFiles = [currentFile];
+		var skipFiles = [];
 		fs.readdirSync(cwd).filter(function(file) {
 			return (file.substr(-3) === '.js') && (skipFiles.indexOf(file) === -1);
 		}).forEach(function(file) {
