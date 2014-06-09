@@ -14,6 +14,7 @@ A $0.01 per 10,000 API requests fee after the first million calls, and a standar
 1. Install the module into your project: `npm install racq` or clone [this repository](https://github.com/travelingtechguy/racq.git)
 2. Install all dependency modules: `npm install`
 2. Use the following code, providing your credentials and preferred region:
+
 ```
 var Queue = require('racq'),
 	options = {
@@ -53,6 +54,7 @@ myQ.authenticate(function(error) {
 Since the library is mostly asynchronous, you can use a tool like [async](https://github.com/caolan/async), or [q](https://github.com/kriskowal/q) to get around callback hell.
 
 ##Available methods
+
 ###Constructor
 You can initialize the class with an `options` object, containing the following parameters:
 - `options.userName` - Rackspace user name
@@ -94,7 +96,8 @@ Not implemented yet - **TBD**.
 To see the code in action, look at the unit-test files in the `/test` folder. See 'Tests' below on how to run the code.
 
 ##Tests
-1. To run tests, first, create a file called `testConfig.json` in the `/test` folder, containing the following:
+To run tests, **you must first create a config file** called `testConfig.json` in the `/test` folder, containing the following:
+
 ```
 {
 	"userName": "Your User Name",
@@ -102,11 +105,12 @@ To see the code in action, look at the unit-test files in the `/test` folder. Se
 	"region": "dfw"
 }
 ```
-2. In the top folder, run the command `npm test` to have all tests run.
-3. To run a specific set of tests, run this command at the top level:
+
+1. In the top folder, run the command `npm test` to have all tests run.
+2. To run a specific set of tests, run this command at the top level:
 `node test authenticate` (you can provide any of the test files available under `/test`).
-4. Alternatively, you can run `mocha test/authenticate` if you'd like to provide mocha specific parameters (see [mocha](https://github.com/visionmedia/mocha) for more documenation).
-5. If you want to see debug messages from tests, or modules, provide the `DEBUG` parameter, and the module name, at the beginning of the line:
+3. Alternatively, you can run `mocha test/authenticate` if you'd like to provide mocha specific parameters (see [mocha](https://github.com/visionmedia/mocha) for more documenation).
+4. If you want to see debug messages from tests, or modules, provide the `DEBUG` parameter, and the module name, at the beginning of the line:
 `DEBUG=racq,authenticate npm test`.
 
 ## License
