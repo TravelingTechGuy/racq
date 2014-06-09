@@ -1,3 +1,4 @@
+[[Project page](https://travelingtechguy.github.io/racq/)] [[npm page](https://www.npmjs.org/package/racq)] [[Traveling Tech Guy](http://TravelingTechGuy.com)]
 #RacQ.js (pronounced 'rak js')
 This module is a Node.js wrapper for the Rackspace Cloud Queues API.
 
