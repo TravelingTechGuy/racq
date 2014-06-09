@@ -58,7 +58,7 @@ describe('Messages operations', function() {
 	
 	it('should delete message from queue ' + queueName, function(done) {
 		debug(msgId);
-		q.deleteMessage(queueName, msgId, done);
+		q.deleteMessages(queueName, msgId, done);
 	});
 
 	it('should post 20 messages to queue ' + queueName + ' and get them in groups of 5 messages', function(done) {
@@ -125,7 +125,7 @@ describe('Messages operations', function() {
 	});
 
 	it('should bulk delete 20 messages from queue ' + queueName, function(done) {
-		q.deleteMessage(queueName, msgIds.join(','), done);
+		q.deleteMessages(queueName, msgIds.join(','), done);
 	});
 
 	after(function(done) {

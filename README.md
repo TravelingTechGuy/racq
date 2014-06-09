@@ -1,7 +1,7 @@
 #RacQ.js (pronounced 'rak js')
 This module is a Node.js wrapper for the Rackspace Cloud Queues API.
 
-##What are Rackspace cloud queues
+##Rackspace Cloud Queues
 Cloud queues are scalable message queues, built on Rackspace's scalable cloud platform. They can be used in either pub-sub or producer-consumer configurations. You can read more about them on  
 * [the Rackspace site](http://www.rackspace.com/cloud/queues/)
 * [full documentation of the API](http://docs.rackspace.com/queues/api/v1.0/cq-devguide/content/overview.html) 
@@ -67,16 +67,31 @@ If an options object is not provided, you'd need to prvide user name/ api key wh
 - `persistedTokenPath` will be `null`, so the token wil not be persisted, and every call to `authenticate` will get to the server
 
 ###Authentication
-* `authenticate(userName, apiKey, callback)` - user name and apiKey can be skipped if provided at class initialization
+* `authenticate(userName, apiKey, callback)` - user name and apiKey can be skipped if provided at class initialization.
 If `persistedTokenPath` has been provided to constructor, the auth token will be saved to a local file, and read from it the next time `suthenticate is called. This could sae network calls, and speed future operatiosn. Auth tokens are good for 24 hours. 
 * `getClientId()` - return the client id of the queue. Useful if you've generated a random client id.
 
 ###Queue operations
+* `createQueue(queueName, callback)` - creates a new queue. Name must be no longer than 64 characters.
+* `deleteQueue(queueName, callback)` - deletes a queue.
+* `queueExists(queueName, callback)` - checks is a specific queue exists.
+* `listsQueues(paramteres, callback)` - returns list of existing queues per account, 10 at a time, alphabetically sorted
+The optional paramteres object allows paging through queues, and specifies whether detailed information be retrieved.
+* `getQueueStats(queueName, callback)` - gets specific queue's statistics.
+* `setQueueMetadata(queueName, metadata, callback)` - attach an informational object to a queue.
+* `getQueueMetadata(queueName, callback)` - gets the queue's metadata.
 
 ###Message operations
+* `postMessages(queueName, messages, callback)` - posts 1-10 messages to a queue. A message has a `body`, which can be any JSON object smaller than 256KB in size, and a `TTL` speficied in seconds (min. 60), dictating the message's time to live.
+* `getMessages(queueName, parameters, callback)` - gets up to 10 messgaes at a time, depending on the paramteres specified.
+* `getMessagesById(queueName, messageIds, callback)` - gets one, or more, messages, by their id.
+* `deleteMessages(queueName, messageIds, claimId, callback)` - deletes one, or more, messages, by their id. Allows proviing a claim id for a claimed message to be deleted.
 
 ###Claims operations
-**TBD**
+Not implemented yet - **TBD**.
+
+##Demo
+To see the code in action, look at the unit-test files in the `/test` folder. See 'Tests' below on how to run the code.
 
 ##Tests
 1. To run tests, first, create a file called `testConfig.json` in the `/test` folder, containing the following:
@@ -95,5 +110,5 @@ If `persistedTokenPath` has been provided to constructor, the auth token will be
 `DEBUG=racq,authenticate npm test`.
 
 ## License
-Copyright (c) 2014 Guy Vider, Traveling Tech Guy LLC
+Copyright (c) 2014 Guy Vider, [Traveling Tech Guy LLC](http://www.TravelingTechGuy.com)  
 Licensed under the MIT license.
