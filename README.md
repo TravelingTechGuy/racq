@@ -1,18 +1,18 @@
 #RacQ.js (pronounced 'rak js')
 This module is a Node.js wrapper for the Rackspace Cloud Queues API.
 
-##What are cloud queues
+##What are Rackspace cloud queues
 Cloud queues are scalable message queues, built on Rackspace's scalable cloud platform. They can be used in either pub-sub or producer-consumer configurations. You can read more about them on  
 * [the Rackspace site](http://www.rackspace.com/cloud/queues/)
 * [full documentation of the API](http://docs.rackspace.com/queues/api/v1.0/cq-devguide/content/overview.html) 
 
 ###Pricing
-As for pricing, currently you get **free** unlimited queues, unlimited messages (at max 256kb/msg), and 1 million API calls a month.  
+Currently (6/2014) you get **free** unlimited queues, unlimited messages (at max 256kb/msg), and 1 million API calls a month.  
 A $0.01 per 10,000 API requests fee after the first million calls, and a standard bandwidth charges apply.
 
-##How to use this module
-1. Install the module into your project:
-`npm install racq`
+##Quick start
+1. Install the module into your project: `npm install racq`
+2. You can also clone [this repository](https://github.com/travelingtechguy/racq.git)
 2. Use the following code, providing your credentials and preferred region:
 ```
 var Queue = require('racq'),
@@ -21,24 +21,59 @@ var Queue = require('racq'),
 		apiKey: '<my Rackspace apiKey>',
 		region: 'dfw'
 	},
+	message = {
+		body: {text: 'my first message!'},
+		ttl: 60
+	},
+	queueName = 'demoQueue123',
 	myQ = new Queue(options);
 
 myQ.authenticate(function(error) {
 	if(!error) {
-		myQ.createQueue('demoQueue123', function(error) {
+		console.log('authenticated!');
+		myQ.createQueue(queueName, function(error) {
 			if(!error) {
-				//do something with the queue...
+				console.log('queue %s created', queueName);
+				myQ.putMessages(queueName, , function(error) {
+					if(!error) {
+						console.log('posted my first message to %s!', queueName);
+						myQ.deleteQueue(queueName, function(error) {
+							if(!error) {
+								console.log('queue %s deleted', queueName);
+							}
+						});
+					}
+				});
 			}
 		});
 	}
 });
 ```
 
+Since the library is mostly asynchronous, you can use a tool like [async](https://github.com/caolan/async), or [q](https://github.com/kriskowal/q) to get around callback hell.
+
 ##Available methods
+###Constructor
+You can initialize the class with an `options` object, containing the following parameters:
+- `options.userName` - Rackspace user name
+- `options.apiKey` - Rackspace API key
+- `options.region` - Rackspace default region. Can be one of: iad, ord, dfw, hkg, lon, syd
+- `options.clientId` - A GUID identifying the current queue client. Required for posting/getting/deleting messages
+- `options.persistedTokenPath` - If provided, auth token will be persisted locally, and looked for at this path
+
+If an options object is not provided, you'd need to prvide user name/ api key when calling `authenticate` and the following defaults will be assumed:
+- `region` will be 'dfw'
+- `clientId` will be a randomly generated GUID
+- `persistedTokenPath` will be `null`, so the token wil not be persisted, and every call to `authenticate` will get to the server
+
 ###Authentication
+* `authenticate(userName, apiKey, callback)` - user name and apiKey can be skipped if provided at class initialization
+If `persistedTokenPath` has been provided to constructor, the auth token will be saved to a local file, and read from it the next time `suthenticate is called. This could sae network calls, and speed future operatiosn. Auth tokens are good for 24 hours. 
+* `getClientId()` - return the client id of the queue. Useful if you've generated a random client id.
 
 ###Queue operations
 
 ###Message operations
 
 ###Claims operations
+**TBD**
