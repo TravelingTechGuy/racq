@@ -58,7 +58,7 @@
 		"429": "too many requests",
 		"503": "service unavailable: try again later"	
 	},
-	"deleteMssage": {
+	"deleteMessage": {
 		"400": "bad request: bad queue name or message ids",
 		"401": "unauthorized - user or password wrong",
 		"403": "forbidden: attempt was made to delete a claimed message without providing claim id"
