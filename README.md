@@ -100,11 +100,12 @@ The optional paramteres object allows paging through queues, and specifies wheth
 ###Claims operations
 Not implemented yet - **TBD**.
 
-##Demo
-To see the code in action, look at the unit-test files in the `/test` folder. See 'Tests' below on how to run the code.
+##Examples
+Look in the `/examples` folder for some code samples, as aweel as a config file sample.  
+You can run each file on its own. The files make use of async to control flow, but it's not mandatory.
 
 ##Tests
-To run tests, **you must first create a config file** called `testConfig.json` in the `/test` folder, containing the following:
+To run tests, **you must first create a config file** called `testConfig.json` in the `/test` folder (or just copy the file `/examples/testConfig.json` to `/test`, and fill in the values):
 
 ```
 {
