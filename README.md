@@ -50,7 +50,10 @@ myQ.authenticate(function(error) {
 
 Since the library is mostly asynchronous, you can use a tool like [async](https://github.com/caolan/async), or [q](https://github.com/kriskowal/q) to get around callback hell.
 
-##Available methods ([JSDoc](https://travelingtechguy.github.io/racq/jsdoc/module-RacQ-RacQ.html))
+##Available methods
+
+**For further documentation, see the [JSDoc generated documentation](https://travelingtechguy.github.io/racq/jsdoc/module-RacQ-RacQ.html).**
+
 ###Constructor
 You can initialize the class with an `options` object, containing the following parameters:
 - `options.userName` - Rackspace user name
@@ -70,6 +73,7 @@ If `persistedTokenPath` has been provided to constructor, the auth token will be
 * `getClientId()` - return the client id of the queue. Useful if you've generated a random client id.
 
 ###Queue operations
+
 * `createQueue(queueName, callback)` - creates a new queue. Name must be no longer than 64 characters.
 * `deleteQueue(queueName, callback)` - deletes a queue.
 * `queueExists(queueName, callback)` - checks is a specific queue exists.
@@ -79,16 +83,22 @@ The optional paramteres object allows paging through queues, and specifies wheth
 * `setQueueMetadata(queueName, metadata, callback)` - attach an informational object to a queue.
 * `getQueueMetadata(queueName, callback)` - gets the queue's metadata.
 
+**Comment:** A queue name must not exceed 64 bytes in length, and it is limited to US-ASCII letters, digits, underscores, and hyphens.
+
 ###Message operations
-* `postMessages(queueName, messages, callback)` - posts 1-10 messages to a queue. A message has a `body`, which can be any JSON object smaller than 256KB in size, and a `TTL` speficied in seconds (min. 60), dictating the message's time to live.
+
+* `postMessages(queueName, messages, callback)` - posts 1-10 messages to a queue. A message has a `body`, which can be any JSON object, and a `ttl` speficied in seconds, dictating the message's time to live.
 * `getMessages(queueName, parameters, callback)` - gets up to 10 messgaes at a time, depending on the paramteres specified.
 * `getMessagesById(queueName, messageIds, callback)` - gets one, or more, messages, by their id.
 * `deleteMessages(queueName, messageIds, claimId, callback)` - deletes one, or more, messages, by their id. Allows proviing a claim id for a claimed message to be deleted.
 
+**Comments:**
+
+1. A meesage `body` can be any JSON object, smaller than 256KB in size.
+2. The `ttl` value must be between 60 and 43200 seconds (12 hours). You must include a value with your message.
+
 ###Claims operations
 Not implemented yet - **TBD**.
-
-**For further documentation, see the [JSDoc generated documentation](https://travelingtechguy.github.io/racq/jsdoc/module-RacQ-RacQ.html).**
 
 ##Demo
 To see the code in action, look at the unit-test files in the `/test` folder. See 'Tests' below on how to run the code.
