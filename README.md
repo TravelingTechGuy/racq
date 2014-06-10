@@ -51,7 +51,6 @@ myQ.authenticate(function(error) {
 Since the library is mostly asynchronous, you can use a tool like [async](https://github.com/caolan/async), or [q](https://github.com/kriskowal/q) to get around callback hell.
 
 ##Available methods ([JSDoc](https://travelingtechguy.github.io/racq/jsdoc/module-RacQ-RacQ.html))
-
 ###Constructor
 You can initialize the class with an `options` object, containing the following parameters:
 - `options.userName` - Rackspace user name
@@ -88,6 +87,8 @@ The optional paramteres object allows paging through queues, and specifies wheth
 
 ###Claims operations
 Not implemented yet - **TBD**.
+
+**For further documentation, see the [JSDoc generated documentation](https://travelingtechguy.github.io/racq/jsdoc/module-RacQ-RacQ.html).**
 
 ##Demo
 To see the code in action, look at the unit-test files in the `/test` folder. See 'Tests' below on how to run the code.
