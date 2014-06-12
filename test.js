@@ -33,7 +33,7 @@ var addFiles = function() {
 		}
 	}
 	else {
-		var skipFiles = [];
+		var skipFiles = ['initializeQueue.js'];
 		fs.readdirSync(cwd).filter(function(file) {
 			return (file.substr(-3) === '.js') && (skipFiles.indexOf(file) === -1);
 		}).forEach(function(file) {

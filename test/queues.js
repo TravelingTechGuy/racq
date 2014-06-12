@@ -1,20 +1,19 @@
 'use strict';
 
 var should = require('should'),
-	debug = require('debug')('opertions'),
-	RacQ = require('../lib/racq');
+	debug = require('debug')('queues');
 
 describe('Queue operations', function() {
 	var queueName = 'demoQueue' + Math.floor(Math.random() * 9000 + 1000),
 		q;	
 	
 	before(function(done) {
-		var config = require('./testConfig'),
-			tokenPath = __dirname + '/token.json';
-
-		config.persistedTokenPath = tokenPath;
-		q = new RacQ(config);
-		q.authenticate(done);
+		require('./initializeQueue')(function(error, queue) {
+			if(!error) {
+				q = queue;
+				done();
+			}
+		});
 	});
 
 	it('should return list of available queues', function(done) {

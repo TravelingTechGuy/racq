@@ -2,8 +2,7 @@
 
 var util = require('util'),
 	should = require('should'),
-	debug = require('debug')('messages'),
-	RacQ = require('../lib/racq');
+	debug = require('debug')('messages');	
 
 describe('Messages operations', function() {
 	var queueName = 'demoQueue' + Math.floor(Math.random() * 9000 + 1000),
@@ -15,13 +14,9 @@ describe('Messages operations', function() {
 		msgId, msgIds = [];
 	
 	before(function(done) {
-		var config = require('./testConfig'),
-			tokenPath = __dirname + '/token.json';
-		
-		config.persistedTokenPath = tokenPath;
-		q = new RacQ(config);	
-		q.authenticate(function(error) {
+		require('./initializeQueue')(function(error, queue) {
 			if(!error) {
+				q = queue;
 				q.createQueue(queueName, done);
 			}
 		});
