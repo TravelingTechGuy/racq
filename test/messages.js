@@ -5,19 +5,20 @@ var util = require('util'),
 	debug = require('debug')('messages'),
 	common = require('./common');	
 
-describe('Messages operations', function() {
+describe('Message operations', function() {
 	var queueName = common.getRandomQueueName(),
+		q = common.initializeQueue(),
 		message = {
 			ttl: 60,
 			body: {myProperty: 'myValue'}
 		},
-		q = common.initializeQueue(),
 		msgId, msgIds = [];
 	
 	before(function(done) {
 		q.authenticate(function(error) {
 			if(!error) {
 				q.createQueue(queueName, done);
+				debug('queue %s created', queueName);
 			}
 		});
 	});
@@ -60,9 +61,9 @@ describe('Messages operations', function() {
 		var async = require('async');
 		async.series([
 			function postMessages(callback) {
-				//prepare 20 messages, in 2 arrays of 10 (maximum per one postMessages call)
-				var msgs1 = common.generateMessages(10, 1),
-					msgs2 = common.generateMessages(10, 11);
+				//prepare 20 messages, with 5 min ttl, in 2 arrays of 10 (maximum per one postMessages call)
+				var msgs1 = common.generateMessages(10, 1, 300),
+					msgs2 = common.generateMessages(10, 11, 300);
 				
 				//send the 2 arrays simultanously
 				async.parallel([
@@ -122,5 +123,6 @@ describe('Messages operations', function() {
 
 	after(function(done) {
 		q.deleteQueue(queueName, done);
+		debug('queue %s deleted', queueName);
 	});
 });

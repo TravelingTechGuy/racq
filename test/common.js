@@ -20,13 +20,12 @@ exports.getRandomQueueName = function() {
 	return 'demoQueue' + Math.floor(Math.random() * 9000 + 1000);
 };
 
-exports.generateMessages = function(n, index) {
+exports.generateMessages = function(n, index, ttl) {
 	var msgs = [];
-	if(!index) {
-		index = 1;
-	}
+	index = index || 1;
+	ttl = ttl || 60;
 	for(var i = 0; i < n; i++) {
-		msgs.push({ttl: 60, body: {number: index++}});
+		msgs.push({ttl: ttl, body: {number: index++}});
 	}
 	return msgs;
 };

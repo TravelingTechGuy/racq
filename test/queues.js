@@ -22,6 +22,7 @@ describe('Queue operations', function() {
 
 	it('should create a queue named ' + queueName, function(done) {
 		q.createQueue(queueName, done);
+		debug('queue %s created', queueName);
 	});
 
 	it('should check the existence of a queue named ' + queueName, function(done) {
@@ -57,5 +58,6 @@ describe('Queue operations', function() {
 
 	it('should delete the queue ' + queueName, function(done) {
 		q.deleteQueue(queueName, done);
+		debug('queue %s deleted', queueName);
 	});		
 });
