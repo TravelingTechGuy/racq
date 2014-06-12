@@ -1,33 +1,29 @@
 {
 	"shared": {
+		"401": "unauthorized - bad auth token. Check user name and api key",
 		"429": "too many requests",
 		"500": "authentication service error - try again later",
 		"503": "authentication service unavailable  - try again later"
 	},
 	"authenticate": {
 		"400": "bad request - parameter/s missing",
-		"401": "unauthorized - user or password wrong",
 		"403": "user disabled"
 	},
 	"listQueues": {
 		"204": "you have no queues in your account",
 		"400": "bad request: the request has a zero/negative value for limit, or non-boolean value for detailed",
-		"401": "unauthorized: the request has an invalid auth token",
 		"404": "not found: the requested queue does not exist"
 	},
 	"createQueue": {
 		"204": "the queue already exists",
-		"400": "The queue has a long name (greater than 64 bytes)",
-		"401": "unauthorized: the request has an invalid auth token"
+		"400": "The queue has a long name (greater than 64 bytes)"
 	},
 	"deleteQueue": {
-		"400": "bad queue name provided",
-		"401": "unauthorized: the request has an invalid auth token"
+		"400": "bad queue name provided"
 	},
 	"queueExists": {},
 	"getQueueStats": {
 		"400": "bad queue name provided",
-		"401": "unauthorized - user or password wrong",
 		"404": "not found: the requested queue does not exist"
 	},
 	"setQueueMetadata": {
@@ -35,32 +31,31 @@
 	},
 	"getQueueMetadata": {
 		"400": "bad queue name provided",
-		"401": "unauthorized - user or password wrong",
 		"404": "not found: the requested queue does not exist"
 	},
 	"postMessages": {
 		"400": "bad request: attempt was made to post more than 100 messages with a single request, or invalid JSON in body, or TTL < 60, or non-integer TTL, or no TTL",
-		"401": "unauthorized - user or password wrong",
 		"404": "not found: the requested queue does not exist"
 	},
 	"getMessages": {
 		"204": "no content: no messages matched the request, or non-existing marker requested",
 		"400": "bad request: attempt was madeto request messages with a limit greater than 100, or limit <= 0, non-boolean value for echo",
-		"401": "unauthorized - user or password wrong",
 		"404": "not found: the requested queue does not exist",
 		"429": "too many requests",
 		"503": "service unavailable: try again later"
 	},
 	"getMessagesById": {
 		"400": "bad request: attempt was made to get more than a 100 messages",
-		"401": "unauthorized - user or password wrong",
 		"404": "not found: the requested queue, or message id does not exist",
 		"429": "too many requests",
 		"503": "service unavailable: try again later"	
 	},
 	"deleteMessage": {
 		"400": "bad request: bad queue name or message ids",
-		"401": "unauthorized - user or password wrong",
 		"403": "forbidden: attempt was made to delete a claimed message without providing claim id"
+	},
+	"claimMessages": {
+		"400": "bad request: wrong limit value, or TTL < 60, or non-integer TTL, or no TTL",
+		"404": "not found: the requested queue does not exist"	
 	}
 }
