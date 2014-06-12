@@ -1,19 +1,15 @@
 'use strict';
 
 var should = require('should'),
-	debug = require('debug')('queues');
+	debug = require('debug')('queues'),
+	common = require('./common');
 
 describe('Queue operations', function() {
-	var queueName = 'demoQueue' + Math.floor(Math.random() * 9000 + 1000),
-		q;	
+	var queueName = common.getRandomQueueName(),
+		q = common.initializeQueue();	
 	
 	before(function(done) {
-		require('./initializeQueue')(function(error, queue) {
-			if(!error) {
-				q = queue;
-				done();
-			}
-		});
+		q.authenticate(done);
 	});
 
 	it('should return list of available queues', function(done) {

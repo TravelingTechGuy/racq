@@ -5,7 +5,7 @@
  * The function will return the authenticated queue, or an error
  * @param  {Function} callback
  */
-module.exports = function(callback) {
+exports.initializeQueue = function() {
 	var RacQ = require('../lib/racq'),
 		config = require('./testConfig'),
 		tokenPath = __dirname + '/token.json',
@@ -13,7 +13,20 @@ module.exports = function(callback) {
 		
 	config.persistedTokenPath = tokenPath;
 	queue = new RacQ(config);
-	queue.authenticate(function(error) {
-		callback(error, queue);
-	});
+	return queue;
+};
+
+exports.getRandomQueueName = function() {
+	return 'demoQueue' + Math.floor(Math.random() * 9000 + 1000);
+};
+
+exports.generateMessages = function(n, index) {
+	var msgs = [];
+	if(!index) {
+		index = 1;
+	}
+	for(var i = 0; i < n; i++) {
+		msgs.push({ttl: 60, body: {number: index++}});
+	}
+	return msgs;
 };

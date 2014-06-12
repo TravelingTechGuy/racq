@@ -2,21 +2,21 @@
 
 var util = require('util'),
 	should = require('should'),
-	debug = require('debug')('messages');	
+	debug = require('debug')('messages'),
+	common = require('./common');	
 
 describe('Messages operations', function() {
-	var queueName = 'demoQueue' + Math.floor(Math.random() * 9000 + 1000),
+	var queueName = common.getRandomQueueName(),
 		message = {
 			ttl: 60,
 			body: {myProperty: 'myValue'}
 		},
-		q,
+		q = common.initializeQueue(),
 		msgId, msgIds = [];
 	
 	before(function(done) {
-		require('./initializeQueue')(function(error, queue) {
+		q.authenticate(function(error) {
 			if(!error) {
-				q = queue;
 				q.createQueue(queueName, done);
 			}
 		});
@@ -61,12 +61,9 @@ describe('Messages operations', function() {
 		async.series([
 			function postMessages(callback) {
 				//prepare 20 messages, in 2 arrays of 10 (maximum per one postMessages call)
-				var msgs1 = [],
-					msgs2 = [];
-				for(var i = 0; i < 10; i++) {
-					msgs1.push({ttl: 600, body: {number: i + 1}});
-					msgs2.push({ttl: 600, body: {number: i + 11}});
-				}
+				var msgs1 = common.generateMessages(10, 1),
+					msgs2 = common.generateMessages(10, 11);
+				
 				//send the 2 arrays simultanously
 				async.parallel([
 					function(cb) {
