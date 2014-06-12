@@ -50,7 +50,6 @@ var RacQ = function(options) {
 	//external libraries
 	var util = require('util'),
 		fs = require('fs'),
-		guid = require('guid'),
 		_ = require('lodash'),
 		request = require('request'),
 		debug = require('debug')('racq'),
@@ -66,6 +65,9 @@ var RacQ = function(options) {
 		_authUrl,
 		_queueUrl;
 
+	///////////////////////
+	// Private function  //
+	///////////////////////
 	//persist auth token to file
 	var persistToken = function() {
 		fs.writeFileSync(_persistedTokenPath, JSON.stringify(_token), {encoding: 'utf-8'});
@@ -90,36 +92,32 @@ var RacQ = function(options) {
 		return token;
 	};
 
+	//return error object for function, based on response status code
 	var returnError = function(functionName, statusCode) {
+		statusCode = statusCode.toString();
+		debug('Error: function=%s, status=%s', functionName, statusCode);
 		if(Object.keys(errors.shared).indexOf(statusCode) !== -1) {
-			functionName = 'shared';
+			return new Error(errors.shared[statusCode]);
 		}
-		return new Error(errors[functionName][statusCode]);
-	};
-
-	//process user options
-	(function(options) {
-		if(options &amp;&amp; options.userName) {
-			_userName = options.userName;
-		}
-		if(options &amp;&amp; options.apiKey) {
-			_apiKey = options.apiKey;
-		}
-		if(options &amp;&amp; options.persistedTokenPath) {
-			_persistedTokenPath = options.persistedTokenPath;
-			_token = getPersistedToken();
-		}
-		if(options &amp;&amp; options.region) {
-			_defaultRegion = options.region;
+		else if(errors[functionName] &amp;&amp; Object.keys(errors[functionName]).indexOf(statusCode) !== -1) {
+			return new Error(errors[functionName][statusCode]);
 		}
 		else {
-			_defaultRegion = 'dfw';
+			return new Error('Status code: ' + statusCode);
 		}
-		var urls = require('./urls');
-		_authUrl = urls.authUrl;	
-		_queueUrl = urls.queueUrl.replace('REGION', _defaultRegion);
-		_clientId = (options &amp;&amp; options.clientId) ? options.clientId : guid.raw();
-	}(options));
+	};
+
+	//turn a JSON object into a query string
+	var objectToQueryString = function(obj) {
+		return _.reduce(obj, function(result, value, key) {
+				return (!_.isNull(value) &amp;&amp; !_.isUndefined(value)) ? (result += key + '=' + value + '&amp;') : result;
+		}, '').slice(0, -1);
+	};
+
+	//get value from a query string
+	var getValueFromQueryString = function(url, key) {
+		return (new RegExp('[?|&amp;]' + key + '=' + '([^&amp;;]+?)(&amp;|#|;|$)').exec(url) || [,""])[1].replace(/\+/g, '%20') || null;
+	};
 
 	//build url for queue/message operations
 	var getQueueUrl = function(queue, messages) {
@@ -134,30 +132,24 @@ var RacQ = function(options) {
 	};
 
 	//set default request headers
-	var getRequestHeaders = function() {
+	var getRequestHeaders = function(includeClientId) {
 		var headers = {
 			'Content-type': 'application/json',
+			'Accept': 'application/json',
 			'X-Auth-Token': _token.id,
-			'Client-ID': _clientId
 		};
+		if(includeClientId) {
+			headers['Client-ID'] = _clientId;
+		}
 		return headers;
 	};
 
 	//parse body and return messages object
 	var processMessages = function(body) {
-		var getMarker = function(marker) {
-			var link = _.findWhere(messages.links, {rel: marker});
-			if(link) {
-				link = link.href;
-				var index = link.indexOf('marker') + 'marker'.length + 1;
-				return link.substring(index, link.indexOf('&amp;', index));
-			}
-			return null;
-		};
 		var messages = JSON.parse(body),
 			result = {
 				messages: [],
-				marker: getMarker('next')
+				marker: getValueFromQueryString(_.findWhere(messages.links, {rel: 'next'}).href, 'marker')
 			};
 		for(var i = 0; i &lt; messages.messages.length; i++) {
 			var message = messages.messages[i];
@@ -170,6 +162,44 @@ var RacQ = function(options) {
 		}
 		return result;
 	};
+
+	//parse body and return messages object
+	var processClaims = function(body) {
+		var claims = body || [],
+			result = [];
+		for(var i = 0; i &lt; claims.length; i++) {
+			var claim = claims[i];
+			result.push({
+				id: claim.href.split('/').pop().split('?')[0],
+				claimId: getValueFromQueryString(claim.href, 'claim_id'),
+				body: claim.body,
+				ttl: claim.ttl,
+				age: claim.age
+			});
+		}
+		return result;
+	};
+
+	//constructor - process user options
+	(function(options) {
+		var guid = require('guid'),
+			urls = require('./urls');
+
+		_defaultRegion =  (options &amp;&amp; options.region) ? options.region : 'dfw';
+		_authUrl = urls.authUrl;	
+		_queueUrl = urls.queueUrl.replace('REGION', _defaultRegion);
+		_clientId = (options &amp;&amp; options.clientId) ? options.clientId : guid.raw();
+		if(options &amp;&amp; options.userName) {
+			_userName = options.userName;
+		}
+		if(options &amp;&amp; options.apiKey) {
+			_apiKey = options.apiKey;
+		}
+		if(options &amp;&amp; options.persistedTokenPath) {
+			_persistedTokenPath = options.persistedTokenPath;
+			_token = getPersistedToken();
+		}
+	}(options));
 
 	/////////////////////
 	// Authentication  //
@@ -219,7 +249,7 @@ var RacQ = function(options) {
 		request.post(options, function(error, response, body) {
 			if (!error &amp;&amp; (response.statusCode === 200 || response.statusCode === 203)) {
 				_token = body.access.token;
-				debug(util.inspect(_token, true, null));
+				debug('authenticate: ' + util.inspect(_token, true, null));
 				if(_persistedTokenPath) {
 					persistToken();
 				}
@@ -251,14 +281,12 @@ var RacQ = function(options) {
 			callback = parameters;
 		}
 		else {
-			url += '?' + _.reduce(parameters, function(result, value, key) {
-				return (value) ? (result += key + '=' + value + '&amp;') : result;
-			}, '').slice(0, -1);
+			url += '?' + objectToQueryString(parameters);
 			debug(url);
 		}
 		var options = {
 				url: url,
-				headers: getRequestHeaders()
+				headers: getRequestHeaders(false)
 			};
 		request.get(options, function(error, response, body) {
 			if (!error &amp;&amp; response.statusCode === 200) {
@@ -467,9 +495,7 @@ var RacQ = function(options) {
 			callback = parameters;
 		}
 		else {
-			url += '?' + _.reduce(parameters, function(result, value, key) {
-				return (value) ? (result += key + '=' + value + '&amp;') : result;
-			}, '').slice(0, -1);
+			url += '?' + objectToQueryString(parameters);
 			debug(url);
 		}
 		var options = {
@@ -479,6 +505,7 @@ var RacQ = function(options) {
 		request.get(options, function(error, response, body) {
 			if (!error &amp;&amp; response.statusCode === 200) {
 				var result = processMessages(body);
+				debug('getMessages: %s messages retrieved', result.length);
 				return callback(null, result);
 			}
 			else {
@@ -538,7 +565,7 @@ var RacQ = function(options) {
 				return callback(null);
 			}
 			else {
-				debug('deleteMessgage: ' + (error || 'statusCode: ' + response.statusCode));
+				debug('deleteMessage: ' + (error || 'statusCode: ' + response.statusCode));
 				return callback(error || returnError('deleteMessage', response.statusCode));
 			}
 		});
@@ -547,6 +574,128 @@ var RacQ = function(options) {
 	/////////////
 	// Claims  //
 	/////////////
+	/**
+	 * Claim messages: a client can mark messages it's handling with a claim, delete them upon process end,
+	 * or releasing the claim if it takes too long to process
+	 * 
+	 * @param  {String}   queueName
+	 * @param  {Object}   [parameters] - claim paramters:
+	 *					@param {Integer} [parameters.limit] maximum number of messages to claim. Can be 1-20, default 10
+	 *					@param {Integer} [parameters.ttl]	time before server releases the claim. Can be 60-43200 seconds (12 hours), default 60
+	 *					@param {Integer} [parameters.grace] grace period to extend claimed message's life. Can be 60-43200 seconds (12 hours), default 60
+	 * @param  {Function} callback - Returns array of message objects on success, or error object
+	 */
+	this.claimMessages = function(queueName, parameters, callback) {
+		var url = getQueueUrl(queueName) + '/claims';
+		if(arguments.length === 2) {
+			callback = parameters;
+		}
+		else {
+			url += '?limit=' + parameters.limit;
+		}
+		var options = {
+			url: url,
+			headers: getRequestHeaders(true),
+			json: parameters
+		};
+		request.post(options, function(error, response, body) {
+			if(!error &amp;&amp; response.statusCode === 201) {
+				//debug('claimMessages: %s', util.inspect(body, true, 2));
+				var claims = processClaims(body);
+				debug('claimMessages: %s messages claimed', claims.length);
+				return callback(null, claims);
+			}
+			else if(response.statusCode === 204) {
+				debug('claimMessages: no messages claimed');
+				return callback(null, null);	
+			}
+			else {
+				debug('claimMessages: ' + (error || 'statusCode: ' + response.statusCode));
+				return callback(error || returnError('claimMessages', response.statusCode), null);
+			}
+		});
+	};
+
+	/**
+	 * Check which massages are claimed by claim ids
+	 * 
+	 * @param  {String}   queueName
+	 * @param  {String}   claimIds - one, or more claim ids to verify, separated by comma
+	 * @param  {Function} callback - Returns array of message objects on success, or error object
+	 */
+	this.queryClaims = function(queueName, claimIds, callback) {
+		var url = getQueueUrl(queueName, false) + '/claims/' + claimIds,
+			options = {
+				url: url,
+				headers: getRequestHeaders(true)
+			};
+		debug(url);
+		request.get(options, function(error, response, body) {
+			if(!error &amp;&amp; response.statusCode === 200) {
+				var messages = JSON.parse(body).messages || [];
+				debug('queryClaims: %s messages claimed', messages.length);
+				return callback(null, processClaims(messages));
+			}
+			else {
+				debug('queryClaims: ' + (error || 'statusCode: ' + response.statusCode));
+				return callback(error || returnError('queryClaims', response.statusCode), null);
+			}
+		});
+	};
+
+	/**
+	 * Update the TTL and grace period of claimed messages
+	 * 
+	 * @param  {String}   queueName
+	 * @param  {String}   claimIds - one, or more claim ids to verify, separated by comma
+	 * @param  {Object}   parameters
+	 * 			@param {Integer} parameters.ttl	time before server releases the claim. Can be 60-43200 seconds (12 hours), default 60
+	 *			@param {Integer} parameters.grace grace period to extend claimed message's life. Can be 60-43200 seconds (12 hours), default 60
+	 * @param  {Function} callback - Returns null on success, or error object
+	 */
+	this.updateClaims = function(queueName, claimIds, parameters, callback) {
+		var url = getQueueUrl(queueName) + '/claims/' + claimIds,
+			options = {
+				url: url,
+				headers: getRequestHeaders(true),
+				json: parameters
+			};
+		request.patch(options, function(error, response) {
+			debug('updateClaims: ' + response.statusCode);
+			if(!error &amp;&amp; (response.statusCode === 200 || response.statusCode === 204)) {
+				return callback(null);
+			}
+			else {
+				debug('updateClaims: ' + (error || 'statusCode: ' + response.statusCode));
+				return callback(error || returnError('updateClaims', response.statusCode));
+			}
+		});
+
+	};
+
+	/**
+	 * Release claim on messages, allowing them to be claimed by a different client
+	 * 
+	 * @param  {String}   queueName
+	 * @param  {String}   claimIds - one, or more claim ids to verify, separated by comma
+	 * @param  {Function} callback - Returns null on success, or error object
+	 */
+	this.releaseClaims = function(queueName, claimIds, callback) {
+		var url = getQueueUrl(queueName) + '/claims/' + claimIds,
+			options = {
+				url: url,
+				headers: getRequestHeaders(true)
+			};
+		request.del(options, function(error, response) {
+			if(!error &amp;&amp; (response.statusCode === 200 || response.statusCode === 204)) {
+				return callback(null);
+			}
+			else {
+				debug('releaseClaims: ' + (error || 'statusCode: ' + response.statusCode));
+				return callback(error || returnError('releaseClaims', response.statusCode));
+			}
+		});
+	};
 };
 
 module.exports = RacQ;</code></pre>
@@ -565,7 +714,7 @@ module.exports = RacQ;</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha5</a> on Mon Jun 09 2014 16:31:18 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha8</a> on Thu Jun 12 2014 15:28:31 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

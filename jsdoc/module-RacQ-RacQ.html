@@ -41,7 +41,7 @@
     
         
 <dt>
-    <h4 class="name" id="RacQ"><span class="type-signature"></span>new RacQ<span class="signature">(<span class="optional">options</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="RacQ"><span class="type-signature"></span>new RacQ<span class="signature">(options<span class="signature-attributes">opt</span>, options.userName, options.apiKey, options.region<span class="signature-attributes">opt</span>, options.clientId<span class="signature-attributes">opt</span>, options.persistedTokenPath<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 </dt>
@@ -67,7 +67,7 @@
         <th>Type</th>
 
         
-        <th>Argument</th>
+        <th>Attributes</th>
         
 
         
@@ -121,7 +121,7 @@
         <th>Type</th>
 
         
-        <th>Argument</th>
+        <th>Attributes</th>
         
 
         
@@ -364,6 +364,8 @@
 
     
 
+     
+
     
 
     
@@ -374,7 +376,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="authenticate"><span class="type-signature"></span>authenticate<span class="signature">(<span class="optional">userName</span>, <span class="optional">apiKey</span>, callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="authenticate"><span class="type-signature"></span>authenticate<span class="signature">(userName<span class="signature-attributes">opt</span>, apiKey<span class="signature-attributes">opt</span>, callback)</span><span class="type-signature"></span></h4>
 
     
 </dt>
@@ -408,7 +410,7 @@ and received token will be persisted to local file.
         <th>Type</th>
 
         
-        <th>Argument</th>
+        <th>Attributes</th>
         
 
         
@@ -543,7 +545,327 @@ and received token will be persisted to local file.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line169">line 169</a>
+        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line199">line 199</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="claimMessages"><span class="type-signature"></span>claimMessages<span class="signature">(queueName, parameters<span class="signature-attributes">opt</span>, parameters.limit<span class="signature-attributes">opt</span>, parameters.ttl<span class="signature-attributes">opt</span>, parameters.grace<span class="signature-attributes">opt</span>, callback)</span><span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Claim messages: a client can mark messages it's handling with a claim, delete them upon process end,
+or releasing the claim if it takes too long to process
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>queueName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parameters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">claim paramters:
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Integer</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">maximum number of messages to claim. Can be 1-20, default 10</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ttl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Integer</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">time before server releases the claim. Can be 60-43200 seconds (12 hours), default 60</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>grace</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Integer</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">grace period to extend claimed message's life. Can be 60-43200 seconds (12 hours), default 60</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Returns array of message objects on success, or error object</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line561">line 561</a>
     </li></ul></dd>
     
 
@@ -685,7 +1007,7 @@ and received token will be persisted to local file.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line254">line 254</a>
+        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line282">line 282</a>
     </li></ul></dd>
     
 
@@ -715,7 +1037,7 @@ and received token will be persisted to local file.
         
             
 <dt>
-    <h4 class="name" id="deleteMessages"><span class="type-signature"></span>deleteMessages<span class="signature">(queueName, messageIds, <span class="optional">claimId</span>, callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="deleteMessages"><span class="type-signature"></span>deleteMessages<span class="signature">(queueName, messageIds, claimId<span class="signature-attributes">opt</span>, callback)</span><span class="type-signature"></span></h4>
 
     
 </dt>
@@ -745,7 +1067,7 @@ and received token will be persisted to local file.
         <th>Type</th>
 
         
-        <th>Argument</th>
+        <th>Attributes</th>
         
 
         
@@ -909,7 +1231,7 @@ and received token will be persisted to local file.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line495">line 495</a>
+        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line522">line 522</a>
     </li></ul></dd>
     
 
@@ -1051,7 +1373,7 @@ and received token will be persisted to local file.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line275">line 275</a>
+        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line303">line 303</a>
     </li></ul></dd>
     
 
@@ -1122,7 +1444,7 @@ and received token will be persisted to local file.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line154">line 154</a>
+        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line184">line 184</a>
     </li></ul></dd>
     
 
@@ -1174,7 +1496,7 @@ and received token will be persisted to local file.
         
             
 <dt>
-    <h4 class="name" id="getMessages"><span class="type-signature"></span>getMessages<span class="signature">(queueName, <span class="optional">parameters</span>, callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getMessages"><span class="type-signature"></span>getMessages<span class="signature">(queueName, parameters<span class="signature-attributes">opt</span>, parameters.limit<span class="signature-attributes">opt</span>, parameters.marker<span class="signature-attributes">opt</span>, parameters.echo<span class="signature-attributes">opt</span>, parameters.include_claimed<span class="signature-attributes">opt</span>, callback)</span><span class="type-signature"></span></h4>
 
     
 </dt>
@@ -1205,7 +1527,7 @@ Can be invoked with 2, 3 or 4 parameters: queueName, [echo], [limit], callback
         <th>Type</th>
 
         
-        <th>Argument</th>
+        <th>Attributes</th>
         
 
         
@@ -1290,7 +1612,7 @@ Can be invoked with 2, 3 or 4 parameters: queueName, [echo], [limit], callback
         <th>Type</th>
 
         
-        <th>Argument</th>
+        <th>Attributes</th>
         
 
         
@@ -1497,7 +1819,7 @@ Can be invoked with 2, 3 or 4 parameters: queueName, [echo], [limit], callback
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line437">line 437</a>
+        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line465">line 465</a>
     </li></ul></dd>
     
 
@@ -1662,7 +1984,7 @@ Can be invoked with 2, 3 or 4 parameters: queueName, [echo], [limit], callback
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line471">line 471</a>
+        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line498">line 498</a>
     </li></ul></dd>
     
 
@@ -1804,7 +2126,7 @@ Can be invoked with 2, 3 or 4 parameters: queueName, [echo], [limit], callback
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line373">line 373</a>
+        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line401">line 401</a>
     </li></ul></dd>
     
 
@@ -1946,7 +2268,7 @@ Can be invoked with 2, 3 or 4 parameters: queueName, [echo], [limit], callback
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line325">line 325</a>
+        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line353">line 353</a>
     </li></ul></dd>
     
 
@@ -1976,7 +2298,7 @@ Can be invoked with 2, 3 or 4 parameters: queueName, [echo], [limit], callback
         
             
 <dt>
-    <h4 class="name" id="listQueues"><span class="type-signature"></span>listQueues<span class="signature">(<span class="optional">parameters</span>, callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="listQueues"><span class="type-signature"></span>listQueues<span class="signature">(parameters<span class="signature-attributes">opt</span>, parameters.limit<span class="signature-attributes">opt</span>, parameters.marker<span class="signature-attributes">opt</span>, parameters.detailed<span class="signature-attributes">opt</span>, callback)</span><span class="type-signature"></span></h4>
 
     
 </dt>
@@ -2006,7 +2328,7 @@ Can be invoked with 2, 3 or 4 parameters: queueName, [echo], [limit], callback
         <th>Type</th>
 
         
-        <th>Argument</th>
+        <th>Attributes</th>
         
 
         
@@ -2060,7 +2382,7 @@ Can be invoked with 2, 3 or 4 parameters: queueName, [echo], [limit], callback
         <th>Type</th>
 
         
-        <th>Argument</th>
+        <th>Attributes</th>
         
 
         
@@ -2234,7 +2556,7 @@ Can be invoked with 2, 3 or 4 parameters: queueName, [echo], [limit], callback
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line221">line 221</a>
+        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line251">line 251</a>
     </li></ul></dd>
     
 
@@ -2264,7 +2586,7 @@ Can be invoked with 2, 3 or 4 parameters: queueName, [echo], [limit], callback
         
             
 <dt>
-    <h4 class="name" id="postMessages"><span class="type-signature"></span>postMessages<span class="signature">(queueName, messages, callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="postMessages"><span class="type-signature"></span>postMessages<span class="signature">(queueName, messages, messages.ttl, messages.body, callback)</span><span class="type-signature"></span></h4>
 
     
 </dt>
@@ -2473,7 +2795,172 @@ Can be invoked with 2, 3 or 4 parameters: queueName, [echo], [limit], callback
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line403">line 403</a>
+        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line431">line 431</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="queryClaims"><span class="type-signature"></span>queryClaims<span class="signature">(queueName, claimIds, callback)</span><span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Check which massages are claimed by claim ids
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>queueName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>claimIds</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">one, or more claim ids to verify, separated by comma</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Returns array of message objects on success, or error object</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line599">line 599</a>
     </li></ul></dd>
     
 
@@ -2615,7 +3102,172 @@ Can be invoked with 2, 3 or 4 parameters: queueName, [echo], [limit], callback
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line297">line 297</a>
+        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line325">line 325</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="releaseClaims"><span class="type-signature"></span>releaseClaims<span class="signature">(queueName, claimIds, callback)</span><span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Release claim on messages, allowing them to be claimed by a different client
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>queueName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>claimIds</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">one, or more claim ids to verify, separated by comma</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Returns null on success, or error object</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line656">line 656</a>
     </li></ul></dd>
     
 
@@ -2780,7 +3432,266 @@ Can be invoked with 2, 3 or 4 parameters: queueName, [echo], [limit], callback
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line350">line 350</a>
+        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line378">line 378</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="updateClaims"><span class="type-signature"></span>updateClaims<span class="signature">(queueName, claimIds, parameters, parameters.ttl, parameters.grace, callback)</span><span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Update the TTL and grace period of claimed messages
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>queueName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>claimIds</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">one, or more claim ids to verify, separated by comma</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parameters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ttl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Integer</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">time before server releases the claim. Can be 60-43200 seconds (12 hours), default 60</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>grace</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Integer</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">grace period to extend claimed message's life. Can be 60-43200 seconds (12 hours), default 60</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Returns null on success, or error object</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="racq.js.html">racq.js</a>, <a href="racq.js.html#line629">line 629</a>
     </li></ul></dd>
     
 
@@ -2829,7 +3740,7 @@ Can be invoked with 2, 3 or 4 parameters: queueName, [echo], [limit], callback
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha5</a> on Mon Jun 09 2014 16:31:18 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha8</a> on Thu Jun 12 2014 15:28:31 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>
