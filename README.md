@@ -98,7 +98,11 @@ The optional paramteres object allows paging through queues, and specifies wheth
 2. The `ttl` value must be between 60 and 43200 seconds (12 hours). You must include a value with your message.
 
 ###Claims operations
-Not implemented yet - **TBD**.
+
+* `claimMessages(queueName, parameters, callback)` - a client can claim (mark) messages it's handling with a claim, delete them upon process end, or release the claim if it takes too long to process them
+* `queryClaims(queueName, claimIds, callback)` - check which massages are claimed by claim ids
+* `updateClaims(queueName, claimIds, parameters, callback)` - update the TTL and grace period of claimed messages
+* `releaseClaims(queueName, claimIds, callback)` - release claim on messages, allowing them to be claimed by a different client
 
 ##Examples
 Look in the `/examples` folder for some code samples, as aweel as a config file sample.  

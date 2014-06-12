@@ -56,6 +56,18 @@
 	},
 	"claimMessages": {
 		"400": "bad request: wrong limit value, or TTL < 60, or non-integer TTL, or no TTL",
-		"404": "not found: the requested queue does not exist"	
+		"404": "not found: the requested queue does not exist"
+	},
+	"queryClaims": {
+		"400": "bad request: bad queue name or claim ids",
+		"404": "not found: the requested queue, or claim id does not exist"
+	},
+	"updateClaims": {
+		"400": "bad request: bad queue name or claim ids, or expired claim id",
+		"404": "not found: the requested queue, or claim is does not exist"	
+	},
+	"releaseClaims": {
+		"400": "bad request: bad queue name",
+		"404": "not found: the requested queue"		
 	}
 }
