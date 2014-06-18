@@ -105,7 +105,7 @@ The optional paramteres object allows paging through queues, and specifies wheth
 * `releaseClaims(queueName, claimIds, callback)` - release claim on messages, allowing them to be claimed by a different client
 
 ##Examples
-Look in the `/examples` folder for some code samples, as aweel as a config file sample.  
+Look in the `/examples` folder for some code samples, as well as a config file sample.  
 You can run each file on its own. The files make use of async to control flow, but it's not mandatory.
 
 ##Tests
