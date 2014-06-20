@@ -3,9 +3,10 @@
 var fs = require('fs'),
 	should = require('should'),
 	debug = require('debug')('authenticate'),
+	common = require('./common'),
 	RacQ = require('../lib/racq'),
-	config = require('./testConfig'),
-	tokenPath = __dirname + '/token.json';
+	config = common.getConfig(),
+	tokenPath = config.tokenPath;
 
 describe('Authentication', function() {
 	before(function() {

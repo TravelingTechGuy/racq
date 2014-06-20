@@ -1,6 +1,9 @@
-[Project page](https://travelingtechguy.github.io/racq/) | [npm page](https://www.npmjs.org/package/racq) | [Traveling Tech Guy](http://TravelingTechGuy.com) | [Travis placeholder](https://travis-ci.org/)
-#RacQ.js (pronounced 'rak js')
-This module is a Node.js wrapper for the Rackspace Cloud Queues API.
+###[Project page](https://travelingtechguy.github.io/racq/) | [npm page](https://www.npmjs.org/package/racq) | [Traveling Tech Guy](http://TravelingTechGuy.com)
+
+# RacQ.js (pronounced 'rak js') 
+ [![Build Status](https://travis-ci.org/TravelingTechGuy/racq.svg?branch=master)](https://travis-ci.org/TravelingTechGuy/racq)
+
+RacQ is a Node.js wrapper for the Rackspace Cloud Queues API.
 
 ##Rackspace Cloud Queues
 Cloud queues are scalable message queues, built on Rackspace's scalable cloud platform. They can be used in either pub-sub or producer-consumer configurations. You can read more about them on:  
@@ -109,6 +112,7 @@ Look in the `/examples` folder for some code samples, as well as a config file s
 You can run each file on its own. The files make use of async to control flow, but it's not mandatory.
 
 ##Tests
+
 To run tests, **you must first create a config file** called `testConfig.json` in the `/test` folder (or just copy the file `/examples/testConfig.json` to `/test`, and fill in the values):
 
 ```

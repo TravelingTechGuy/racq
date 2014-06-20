@@ -1,5 +1,6 @@
 'use strict';
 
+var debug = require('debug')('common');
 /**
  * Initialize a queue, load config file, provide local token path, and authenticate
  * The function will return the authenticated queue, or an error
@@ -7,12 +8,8 @@
  */
 exports.initializeQueue = function() {
 	var RacQ = require('../lib/racq'),
-		config = require('./testConfig'),
-		tokenPath = __dirname + '/token.json',
-		queue;
-		
-	config.persistedTokenPath = tokenPath;
-	queue = new RacQ(config);
+		config = getConfig(),
+		queue = new RacQ(config);
 	return queue;
 };
 
@@ -29,3 +26,27 @@ exports.generateMessages = function(n, index, ttl) {
 	}
 	return msgs;
 };
+
+var getConfig = function() {
+	var fs = require('fs'),
+		config = {};
+
+	if(process.env.USERNAME && process.env.APIKEY) {
+		config = {
+			userName: process.env.USERNAME,
+			apiKey: process.env.APIKEY
+		};
+		debug('setting config parameters from environment variables');
+	}
+	else if(fs.existsFileSync(__dirname + '/testConfig.json')) {
+		config = require('./testConfig');
+		debug('setting config parameters from testConfig.json');
+	}
+	else {
+		debug('no config parameters specified');
+	}
+	config.tokenPath = __dirname + '/token.json';
+	return config;
+};
+
+exports.getConfig = getConfig;
