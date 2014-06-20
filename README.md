@@ -113,7 +113,10 @@ You can run each file on its own. The files make use of async to control flow, b
 
 ##Tests
 
-To run tests, **you must first create a config file** called `testConfig.json` in the `/test` folder (or just copy the file `/examples/testConfig.json` to `/test`, and fill in the values):
+Before you run tests, **you must provide your own user name and API key**. You can do it in one of 2 ways:
+
+1. Provide the parameters in environment variables, e.g. `USERNAME=myusername APIKEY=myapikey npm test`.
+2. Create a file called `testConfig.json` in the `/test` folder (or just copy the file `/examples/testConfig.json` to `/test`, and fill in the values).
 
 ```
 {
@@ -122,6 +125,8 @@ To run tests, **you must first create a config file** called `testConfig.json` i
 	"region": "dfw"
 }
 ```
+
+Once you provided the parameters:
 
 1. In the top folder, run the command `npm test` to have all tests run.
 2. To run a specific set of tests, run this command at the top level:
