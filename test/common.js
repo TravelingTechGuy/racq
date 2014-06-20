@@ -38,7 +38,7 @@ var getConfig = function() {
 		};
 		debug('setting config parameters from environment variables');
 	}
-	else if(fs.existsFileSync(__dirname + '/testConfig.json')) {
+	else if(fs.existsSync(__dirname + '/testConfig.json')) {
 		config = require('./testConfig');
 		debug('setting config parameters from testConfig.json');
 	}
