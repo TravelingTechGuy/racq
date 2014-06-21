@@ -14,8 +14,14 @@ describe('Queue operations', function() {
 
 	it('should return list of available queues', function(done) {
 		q.listQueues(function(error, queues) {
-			should.not.exist(error);
-			debug('%s queues found', queues.length);
+			if(error) {
+				error.toString().should.containEql('you have no queues in your account');
+			}
+			else {
+				should.not.exist(error);
+				should.exist(queues);
+				debug('%s queues found', queues.length);
+			}
 			done();
 		});
 	});

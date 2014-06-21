@@ -1,6 +1,6 @@
 {
   "name": "racq",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Rackspace Cloud Queues API wrapper",
   "author": "Guy Vider",
   "main": "./lib/racq.js",
