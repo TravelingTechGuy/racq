@@ -2,7 +2,9 @@
 
 var util = require('util'),
 	should = require('should'),
-	debug = require('debug')('messages'),
+	dbg = require('debug'),
+	debug = dbg('messages'),
+	statistics = dbg('messages:statistics'),
 	common = require('./common');	
 
 describe('Message operations', function() {
@@ -124,5 +126,6 @@ describe('Message operations', function() {
 	after(function(done) {
 		q.deleteQueue(queueName, done);
 		debug('queue %s deleted', queueName);
+		statistics('Statistics:', q.getStatistics());
 	});
 });

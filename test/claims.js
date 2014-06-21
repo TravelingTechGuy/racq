@@ -3,7 +3,9 @@
 var util = require('util'),
 	async = require('async'),
 	should = require('should'),
-	debug = require('debug')('claims'),
+	dbg = require('debug'),
+	debug = dbg('claims'),
+	statistics = dbg('claims:statistics'),
 	common = require('./common');	
 
 describe('Claim operations', function() {
@@ -21,8 +23,7 @@ describe('Claim operations', function() {
 				callback(null);
 			},
 			function authenticateQueues(callback) {
-				async.parallel([q1.authenticate, q2.authenticate], callback);
-				
+				async.parallel([q1.authenticate, q2.authenticate], callback);	
 			},
 			function createQueue(callback) {
 				q1.createQueue(queueName, callback);
@@ -128,5 +129,6 @@ describe('Claim operations', function() {
 	after(function(done) {
 		q1.deleteQueue(queueName, done);
 		debug('queue %s deleted', queueName);
+		statistics('Statistics (q1, q2):', q1.getStatistics(), q2.getStatistics());
 	});
 });

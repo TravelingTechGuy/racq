@@ -1,7 +1,9 @@
 'use strict';
 
 var should = require('should'),
-	debug = require('debug')('queues'),
+	dbg = require('debug'),
+	debug = dbg('queues'),
+	statistics = dbg('queues:statistics'),
 	common = require('./common');
 
 describe('Queue operations', function() {
@@ -65,5 +67,9 @@ describe('Queue operations', function() {
 	it('should delete the queue ' + queueName, function(done) {
 		q.deleteQueue(queueName, done);
 		debug('queue %s deleted', queueName);
-	});		
+	});
+
+	after(function() {
+		statistics('Statistics:', q.getStatistics());
+	});
 });

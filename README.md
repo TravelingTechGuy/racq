@@ -107,6 +107,13 @@ The optional paramteres object allows paging through queues, and specifies wheth
 * `updateClaims(queueName, claimIds, parameters, callback)` - update the TTL and grace period of claimed messages
 * `releaseClaims(queueName, claimIds, callback)` - release claim on messages, allowing them to be claimed by a different client
 
+###Statistics
+The cost of cloud queus is measured by 2 factors: number of calls (first million a month are free), and payload. 
+
+`getStatistics()` will return an object containing: # of calls, sent bytes and received bytes. 
+
+Every module contains a `:statistics` DEBUG qualifier. To see this in action, specify `DEBUG=modulename:statistics` to get statistics from the main library or a test module, or specify `DEBUG=*:statistics` to get statistics from all modules.
+
 ##Examples
 Look in the `/examples` folder for some code samples, as well as a config file sample.  
 You can run each file on its own. The files make use of async to control flow, but it's not mandatory.
@@ -134,6 +141,8 @@ Once you provided the parameters:
 3. Alternatively, you can run `mocha test/authenticate` if you'd like to provide mocha specific parameters (see [mocha](https://github.com/visionmedia/mocha) for more documenation).
 4. If you want to see debug messages from tests, or modules, provide the `DEBUG` parameter, and the module name, at the beginning of the line:
 `DEBUG=racq,authenticate npm test`.
+5. If you want to see statistics messages from tests, or modules, provide the `DEBUG` parameter, and `modulename:statistics`, at the beginning of the line:
+`DEBUG=racq:statistics,authenticate:statistics npm test`.
 
 ## License
 Copyright (c) 2014 Guy Vider, [Traveling Tech Guy LLC](http://www.TravelingTechGuy.com)  
