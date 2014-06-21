@@ -52,7 +52,9 @@ var RacQ = function(options) {
 		fs = require('fs'),
 		_ = require('lodash'),
 		request = require('request'),
-		debug = require('debug')('racq'),
+		dbg = require('debug'),
+		debug = dbg('racq'),
+		statistics = dbg('racq:statistics'),
 		errors = require('./errors');
 		
 	//private variables
@@ -63,7 +65,8 @@ var RacQ = function(options) {
 		_clientId,
 		_defaultRegion,
 		_authUrl,
-		_queueUrl;
+		_queueUrl,
+		_statistics;
 
 	///////////////////////
 	// Private function  //
@@ -92,6 +95,34 @@ var RacQ = function(options) {
 		return token;
 	};
 
+	//Request wrapper, enabling statistics capture
+	var httpRequest = function(method, options, callback) {
+		var objectLength = function(o) {
+			var length = 0;
+			if(!_.isNull(o) &amp;&amp; !_.isUndefined(o)) {
+				if(_.isString(o)) {
+					length = o.length;
+				}
+				else if(_.isObject(o)) {
+					length = JSON.stringify(o).length;
+				}
+				else {
+					debug('object type: %s', typeof o);
+				}
+			}
+			return length;
+		};
+
+		var func = request[method];
+		func(options, function(error, response, body) {
+			_statistics.calls++;
+			_statistics.bytesReceived += objectLength(body);
+			_statistics.bytesSent += objectLength(options.json);
+			statistics('Statistics:', _statistics);
+			return callback(error, response, body);
+		});
+	};
+	
 	//return error object for function, based on response status code
 	var returnError = function(functionName, statusCode) {
 		statusCode = statusCode.toString();
@@ -189,6 +220,11 @@ var RacQ = function(options) {
 		_authUrl = urls.authUrl;	
 		_queueUrl = urls.queueUrl.replace('REGION', _defaultRegion);
 		_clientId = (options &amp;&amp; options.clientId) ? options.clientId : guid.raw();
+		_statistics = {
+			calls: 0,
+			bytesReceived: 0,
+			bytesSent: 0
+		};
 		if(options &amp;&amp; options.userName) {
 			_userName = options.userName;
 		}
@@ -210,6 +246,14 @@ var RacQ = function(options) {
 	 */
 	this.getClientId = function() {
 		return _clientId;
+	};
+
+	/**
+	 * Get current network statistics (for accounting purposes)
+	 * @return {Object} statistics object containing number of calls, bytes sent, and bytes recieved so far
+	 */
+	this.getStatistics = function() {
+		return _statistics;
 	};
 
 	/**
@@ -246,7 +290,7 @@ var RacQ = function(options) {
 					}
 				}
 			};		
-		request.post(options, function(error, response, body) {
+		httpRequest('post', options, function(error, response, body) {
 			if (!error &amp;&amp; (response.statusCode === 200 || response.statusCode === 203)) {
 				_token = body.access.token;
 				debug('authenticate: ' + util.inspect(_token, true, null));
@@ -288,7 +332,7 @@ var RacQ = function(options) {
 				url: url,
 				headers: getRequestHeaders(false)
 			};
-		request.get(options, function(error, response, body) {
+		httpRequest('get', options, function(error, response, body) {
 			if (!error &amp;&amp; response.statusCode === 200) {
 				var result = JSON.parse(body).queues;
 				debug(util.inspect(result));
@@ -311,7 +355,7 @@ var RacQ = function(options) {
 				url: getQueueUrl(queueName),
 				headers: getRequestHeaders(false)
 			};
-		request.put(options, function(error, response) {
+		httpRequest('put', options, function(error, response) {
 			if (!error &amp;&amp; response.statusCode === 201) {
 				return callback(null);
 			}
@@ -332,9 +376,9 @@ var RacQ = function(options) {
 				url: getQueueUrl(queueName),
 				headers: getRequestHeaders(false)
 			};
-		request.del(options, function(error, response) {
+		httpRequest('del', options, function(error, response) {
 			if (!error &amp;&amp; (response.statusCode === 200 || response.statusCode === 204)) {
-				debug('queue %s deleted', queueName)
+				debug('queue %s deleted', queueName);
 				return callback(null);
 			}
 			else {
@@ -354,7 +398,7 @@ var RacQ = function(options) {
 				url: getQueueUrl(queueName),
 				headers: getRequestHeaders(false)
 			};
-		request.get(options, function(error, response) {
+		httpRequest('get', options, function(error, response) {
 			if (!error) {
 				if(response.statusCode === 204) {
 					debug('queue %s exists', queueName);
@@ -382,7 +426,7 @@ var RacQ = function(options) {
 				url: getQueueUrl(queueName) + '/stats',
 				headers: getRequestHeaders(false)
 			};
-		request.get(options, function(error, response, body) {
+		httpRequest('get', options, function(error, response, body) {
 			if (!error &amp;&amp; response.statusCode === 200) {
 				var result = JSON.parse(body);
 				debug('getQueueStats: %s', util.inspect(result));
@@ -408,7 +452,7 @@ var RacQ = function(options) {
 				headers: getRequestHeaders(false),
 				json: metadata
 			};
-		request.put(options, function(error, response) {
+		httpRequest('put', options, function(error, response) {
 			if (!error &amp;&amp; response.statusCode === 204) {
 				return callback(null);
 			}
@@ -430,7 +474,7 @@ var RacQ = function(options) {
 				url: getQueueUrl(queueName) + '/metadata',
 				headers: getRequestHeaders(false)
 			};
-		request.get(options, function(error, response, body) {
+		httpRequest('get', options, function(error, response, body) {
 			if (!error &amp;&amp; response.statusCode === 200) {
 				var result = JSON.parse(body);
 				debug('getQueueMetadata: %s', util.inspect(result));
@@ -465,7 +509,7 @@ var RacQ = function(options) {
 				headers: getRequestHeaders(true),
 				json: messages
 			};
-		request.post(options, function(error, response) {
+		httpRequest('post', options, function(error, response) {
 			if (!error &amp;&amp; (response.statusCode === 200 || response.statusCode === 201)) {
 				debug('postMessages: %s messages posted', messages.length);
 				return callback(null);
@@ -502,7 +546,7 @@ var RacQ = function(options) {
 				url: url,
 				headers: getRequestHeaders(true)
 			};
-		request.get(options, function(error, response, body) {
+		httpRequest('get', options, function(error, response, body) {
 			if (!error &amp;&amp; response.statusCode === 200) {
 				var result = processMessages(body);
 				debug('getMessages: %s messages retrieved', result.length);
@@ -527,7 +571,7 @@ var RacQ = function(options) {
 				url: getQueueUrl(queueName, true) + '/' + messageIds,
 				headers: getRequestHeaders(true)
 			};
-		request.get(options, function(error, response, body) {
+		httpRequest('get', options, function(error, response, body) {
 			if (!error &amp;&amp; response.statusCode === 200) {
 				return callback(null, JSON.parse(body));
 			}
@@ -559,7 +603,7 @@ var RacQ = function(options) {
 				url: url,
 				headers: getRequestHeaders(true)
 			};
-		request.del(options, function(error, response) {
+		httpRequest('del', options, function(error, response) {
 			if(!error &amp;&amp; (response.statusCode === 200 || response.statusCode === 204)) {
 				debug('%s deleted from %s', messageIds, queueName);
 				return callback(null);
@@ -598,7 +642,7 @@ var RacQ = function(options) {
 			headers: getRequestHeaders(true),
 			json: parameters
 		};
-		request.post(options, function(error, response, body) {
+		httpRequest('post', options, function(error, response, body) {
 			if(!error &amp;&amp; response.statusCode === 201) {
 				//debug('claimMessages: %s', util.inspect(body, true, 2));
 				var claims = processClaims(body);
@@ -630,7 +674,7 @@ var RacQ = function(options) {
 				headers: getRequestHeaders(true)
 			};
 		debug(url);
-		request.get(options, function(error, response, body) {
+		httpRequest('get', options, function(error, response, body) {
 			if(!error &amp;&amp; response.statusCode === 200) {
 				var messages = JSON.parse(body).messages || [];
 				debug('queryClaims: %s messages claimed', messages.length);
@@ -660,7 +704,7 @@ var RacQ = function(options) {
 				headers: getRequestHeaders(true),
 				json: parameters
 			};
-		request.patch(options, function(error, response) {
+		httpRequest('patch', options, function(error, response) {
 			debug('updateClaims: ' + response.statusCode);
 			if(!error &amp;&amp; (response.statusCode === 200 || response.statusCode === 204)) {
 				return callback(null);
@@ -686,7 +730,7 @@ var RacQ = function(options) {
 				url: url,
 				headers: getRequestHeaders(true)
 			};
-		request.del(options, function(error, response) {
+		httpRequest('del', options, function(error, response) {
 			if(!error &amp;&amp; (response.statusCode === 200 || response.statusCode === 204)) {
 				return callback(null);
 			}
@@ -714,7 +758,7 @@ module.exports = RacQ;</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha8</a> on Thu Jun 12 2014 15:28:31 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha8</a> on Sat Jun 21 2014 16:21:59 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>
