@@ -1,7 +1,7 @@
 ###[Project page](https://travelingtechguy.github.io/racq/) | [npm page](https://www.npmjs.org/package/racq) | [Traveling Tech Guy](http://TravelingTechGuy.com)
 
-# RacQ.js (pronounced 'rak js') 
- [![Build Status](https://travis-ci.org/TravelingTechGuy/racq.svg?branch=master)](https://travis-ci.org/TravelingTechGuy/racq)
+# RacQ.js (pronounced 'rak js') [![Build Status](https://travis-ci.org/TravelingTechGuy/racq.svg?branch=master)](https://travis-ci.org/TravelingTechGuy/racq)
+ [![NPM](https://nodei.co/npm/racq.png)](https://nodei.co/npm/racq/)
 
 RacQ is a Node.js wrapper for the Rackspace Cloud Queues API.
 
