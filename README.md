@@ -6,7 +6,7 @@
 RacQ is a Node.js wrapper for the Rackspace Cloud Queues API.
 
 ##Rackspace Cloud Queues
-Cloud queues are scalable message queues, built on Rackspace's scalable cloud platform. They can be used in either pub-sub or producer-consumer configurations. You can read more about them on:  
+Cloud queues are scalable message queues, built on Rackspace's scalable cloud platform. They can be used in either pub-sub or producer-consumer configurations. You can read more about them on:
 * [The Rackspace site](http://www.rackspace.com/cloud/queues/) - info and pricing
 * [Full documentation of the API](http://docs.rackspace.com/queues/api/v1.0/cq-devguide/content/overview.html)
 
@@ -72,8 +72,9 @@ If an options object is not provided, you'd need to prvide user name/ api key wh
 
 ###Authentication
 * `authenticate(userName, apiKey, callback)` - user name and apiKey can be skipped if provided at class initialization.
-If `persistedTokenPath` has been provided to constructor, the auth token will be saved to a local file, and read from it the next time `suthenticate is called. This could sae network calls, and speed future operatiosn. Auth tokens are good for 24 hours. 
+If `persistedTokenPath` has been provided to constructor, the auth token will be saved to a local file, and read from it the next time `suthenticate is called. This could sae network calls, and speed future operatiosn. Auth tokens are good for 24 hours.
 * `getClientId()` - return the client id of the queue. Useful if you've generated a random client id.
+* `deleteToken()` - deletes the currently used token, making it possible to re-authenticate even if the actual token hasn't expired yet.
 
 ###Queue operations
 
@@ -108,14 +109,14 @@ The optional paramteres object allows paging through queues, and specifies wheth
 * `releaseClaims(queueName, claimIds, callback)` - release claim on messages, allowing them to be claimed by a different client
 
 ###Statistics
-The cost of cloud queus is measured by 2 factors: number of calls (first million a month are free), and payload. 
+The cost of cloud queus is measured by 2 factors: number of calls (first million a month are free), and payload.
 
-`getStatistics()` will return an object containing: # of calls, sent bytes and received bytes. 
+`getStatistics()` will return an object containing: # of calls, sent bytes and received bytes.
 
 Every module contains a `:statistics` DEBUG qualifier. To see this in action, specify `DEBUG=modulename:statistics` to get statistics from the main library or a test module, or specify `DEBUG=*:statistics` to get statistics from all modules.
 
 ##Examples
-Look in the `/examples` folder for some code samples, as well as a config file sample.  
+Look in the `/examples` folder for some code samples, as well as a config file sample.
 You can run each file on its own. The files make use of async to control flow, but it's not mandatory.
 
 ##Tests
@@ -145,5 +146,5 @@ Once you provided the parameters:
 `DEBUG=racq:statistics,authenticate:statistics npm test`.
 
 ## License
-Copyright (c) 2014 Guy Vider, [Traveling Tech Guy LLC](http://www.TravelingTechGuy.com)  
+Copyright (c) 2014 Guy Vider, [Traveling Tech Guy LLC](http://www.TravelingTechGuy.com)
 Licensed under the MIT license.
