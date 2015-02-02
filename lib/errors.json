@@ -48,7 +48,7 @@
 		"400": "bad request: attempt was made to get more than a 100 messages",
 		"404": "not found: the requested queue, or message id does not exist",
 		"429": "too many requests",
-		"503": "service unavailable: try again later"	
+		"503": "service unavailable: try again later"
 	},
 	"deleteMessage": {
 		"400": "bad request: bad queue name or message ids",
@@ -64,10 +64,10 @@
 	},
 	"updateClaims": {
 		"400": "bad request: bad queue name or claim ids, or expired claim id",
-		"404": "not found: the requested queue, or claim is does not exist"	
+		"404": "not found: the requested queue, or claim is does not exist"
 	},
 	"releaseClaims": {
 		"400": "bad request: bad queue name",
-		"404": "not found: the requested queue"		
+		"404": "not found: the requested queue"
 	}
 }

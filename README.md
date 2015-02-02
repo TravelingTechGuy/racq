@@ -146,5 +146,5 @@ Once you provided the parameters:
 `DEBUG=racq:statistics,authenticate:statistics npm test`.
 
 ## License
-Copyright (c) 2014 Guy Vider, [Traveling Tech Guy LLC](http://www.TravelingTechGuy.com)
+Copyright (c) 2014 Guy Vider, [Traveling Tech Guy LLC](http://www.TravelingTechGuy.com)  
 Licensed under the MIT license.
