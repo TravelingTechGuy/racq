@@ -65,14 +65,14 @@ You can initialize the class with an `options` object, containing the following 
 - `options.clientId` - A GUID identifying the current queue client. Required for posting/getting/deleting messages
 - `options.persistedTokenPath` - If provided, auth token will be persisted locally, and looked for at this path
 
-If an options object is not provided, you'd need to prvide user name/ api key when calling `authenticate` and the following defaults will be assumed:
+If an options object is not provided, you'd need to provide user name/ api key when calling `authenticate` and the following defaults will be assumed:
 - `region` will be 'dfw'
 - `clientId` will be a randomly generated GUID
 - `persistedTokenPath` will be `null`, so the token wil not be persisted, and every call to `authenticate` will get to the server
 
 ###Authentication
 * `authenticate(userName, apiKey, callback)` - user name and apiKey can be skipped if provided at class initialization.
-If `persistedTokenPath` has been provided to constructor, the auth token will be saved to a local file, and read from it the next time `suthenticate is called. This could sae network calls, and speed future operatiosn. Auth tokens are good for 24 hours.
+If `persistedTokenPath` has been provided to constructor, the auth token will be saved to a local file, and read from it the next time `authenticate is called. This could sae network calls, and speed future operations. Auth tokens are good for 24 hours.
 * `getClientId()` - return the client id of the queue. Useful if you've generated a random client id.
 * `deleteToken()` - deletes the currently used token, making it possible to re-authenticate even if the actual token hasn't expired yet.
 
@@ -91,10 +91,10 @@ The optional paramteres object allows paging through queues, and specifies wheth
 
 ###Message operations
 
-* `postMessages(queueName, messages, callback)` - posts 1-10 messages to a queue. A message has a `body`, which can be any JSON object, and a `ttl` speficied in seconds, dictating the message's time to live.
-* `getMessages(queueName, parameters, callback)` - gets up to 10 messgaes at a time, depending on the paramteres specified.
+* `postMessages(queueName, messages, callback)` - posts 1-10 messages to a queue. A message has a `body`, which can be any JSON object, and a `ttl` specified in seconds, dictating the message's time to live.
+* `getMessages(queueName, parameters, callback)` - gets up to 10 messages at a time, depending on the parameters specified.
 * `getMessagesById(queueName, messageIds, callback)` - gets one, or more, messages, by their id.
-* `deleteMessages(queueName, messageIds, claimId, callback)` - deletes one, or more, messages, by their id. Allows proviing a claim id for a claimed message to be deleted.
+* `deleteMessages(queueName, messageIds, claimId, callback)` - deletes one, or more, messages, by their id. Allows proving a claim id for a claimed message to be deleted.
 
 **Comments:**
 
@@ -139,7 +139,7 @@ Once you provided the parameters:
 1. In the top folder, run the command `npm test` to have all tests run.
 2. To run a specific set of tests, run this command at the top level:
 `node test authenticate` (you can provide any of the test files available under `/test`).
-3. Alternatively, you can run `mocha test/authenticate` if you'd like to provide mocha specific parameters (see [mocha](https://github.com/visionmedia/mocha) for more documenation).
+3. Alternatively, you can run `mocha test/authenticate` if you'd like to provide mocha specific parameters (see [mocha](https://github.com/visionmedia/mocha) for more documentation).
 4. If you want to see debug messages from tests, or modules, provide the `DEBUG` parameter, and the module name, at the beginning of the line:
 `DEBUG=racq,authenticate npm test`.
 5. If you want to see statistics messages from tests, or modules, provide the `DEBUG` parameter, and `modulename:statistics`, at the beginning of the line:
