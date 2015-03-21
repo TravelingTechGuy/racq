@@ -72,7 +72,7 @@ If an options object is not provided, you'd need to provide user name/ api key w
 
 ###Authentication
 * `authenticate(userName, apiKey, callback)` - user name and apiKey can be skipped if provided at class initialization.
-If `persistedTokenPath` has been provided to constructor, the auth token will be saved to a local file, and read from it the next time `authenticate is called. This could sae network calls, and speed future operations. Auth tokens are good for 24 hours.
+If `persistedTokenPath` has been provided to constructor, the auth token will be saved to a local file, and read from it the next time `authenticate` is called. This could save network calls, and speed future operations. Auth tokens are good for 24 hours.
 * `getClientId()` - return the client id of the queue. Useful if you've generated a random client id.
 * `deleteToken()` - deletes the currently used token, making it possible to re-authenticate even if the actual token hasn't expired yet.
 
