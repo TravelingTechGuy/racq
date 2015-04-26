@@ -1,16 +1,16 @@
-###[Project page](https://travelingtechguy.github.io/racq/) | [npm page](https://www.npmjs.org/package/racq) | [Traveling Tech Guy](http://TravelingTechGuy.com)
+### [Project page](https://travelingtechguy.github.io/racq/) | [npm page](https://www.npmjs.org/package/racq) | [Traveling Tech Guy](http://TravelingTechGuy.com)
 
 # RacQ.js (pronounced 'rak js') [![Build Status](https://travis-ci.org/TravelingTechGuy/racq.svg?branch=master)](https://travis-ci.org/TravelingTechGuy/racq)
  [![NPM](https://nodei.co/npm/racq.png)](https://nodei.co/npm/racq/)
 
 RacQ is a Node.js wrapper for the Rackspace Cloud Queues API.
 
-##Rackspace Cloud Queues
+## Rackspace Cloud Queues
 Cloud queues are scalable message queues, built on Rackspace's scalable cloud platform. They can be used in either pub-sub or producer-consumer configurations. You can read more about them on:
 * [The Rackspace site](http://www.rackspace.com/cloud/queues/) - info and pricing
 * [Full documentation of the API](http://docs.rackspace.com/queues/api/v1.0/cq-devguide/content/overview.html)
 
-##Quick start
+## Quick start
 1. Install the module into your project: `npm install racq`
 2. Alternatively, clone [this repository](https://github.com/travelingtechguy/racq.git) and install all dependency modules: `npm install`
 2. Use the following code, providing your credentials and preferred region:
@@ -53,11 +53,11 @@ myQ.authenticate(function(error) {
 
 Since the library is mostly asynchronous, you can use a tool like [async](https://github.com/caolan/async), or [q](https://github.com/kriskowal/q) to get around callback hell.
 
-##Available methods
+## Available methods
 
 **For further documentation, see the [JSDoc generated documentation](https://travelingtechguy.github.io/racq/jsdoc/module-RacQ-RacQ.html).**
 
-###Constructor
+### Constructor
 You can initialize the class with an `options` object, containing the following parameters:
 - `options.userName` - Rackspace user name
 - `options.apiKey` - Rackspace API key
@@ -70,13 +70,13 @@ If an options object is not provided, you'd need to provide user name/ api key w
 - `clientId` will be a randomly generated GUID
 - `persistedTokenPath` will be `null`, so the token wil not be persisted, and every call to `authenticate` will get to the server
 
-###Authentication
+### Authentication
 * `authenticate(userName, apiKey, callback)` - user name and apiKey can be skipped if provided at class initialization.
 If `persistedTokenPath` has been provided to constructor, the auth token will be saved to a local file, and read from it the next time `authenticate` is called. This could save network calls, and speed future operations. Auth tokens are good for 24 hours.
 * `getClientId()` - return the client id of the queue. Useful if you've generated a random client id.
 * `deleteToken()` - deletes the currently used token, making it possible to re-authenticate even if the actual token hasn't expired yet.
 
-###Queue operations
+### Queue operations
 
 * `createQueue(queueName, callback)` - creates a new queue. Name must be no longer than 64 characters.
 * `deleteQueue(queueName, callback)` - deletes a queue.
@@ -89,7 +89,7 @@ The optional paramteres object allows paging through queues, and specifies wheth
 
 **Comment:** A queue name must not exceed 64 bytes in length, and it is limited to US-ASCII letters, digits, underscores, and hyphens.
 
-###Message operations
+### Message operations
 
 * `postMessages(queueName, messages, callback)` - posts 1-10 messages to a queue. A message has a `body`, which can be any JSON object, and a `ttl` specified in seconds, dictating the message's time to live.
 * `getMessages(queueName, parameters, callback)` - gets up to 10 messages at a time, depending on the parameters specified.
@@ -101,25 +101,25 @@ The optional paramteres object allows paging through queues, and specifies wheth
 1. A meesage `body` can be any JSON object, smaller than 256KB in size.
 2. The `ttl` value must be between 60 and 43200 seconds (12 hours). You must include a value with your message.
 
-###Claims operations
+### Claims operations
 
 * `claimMessages(queueName, parameters, callback)` - a client can claim (mark) messages it's handling with a claim, delete them upon process end, or release the claim if it takes too long to process them
 * `queryClaims(queueName, claimIds, callback)` - check which massages are claimed by claim ids
 * `updateClaims(queueName, claimIds, parameters, callback)` - update the TTL and grace period of claimed messages
 * `releaseClaims(queueName, claimIds, callback)` - release claim on messages, allowing them to be claimed by a different client
 
-###Statistics
+### Statistics
 The cost of cloud queus is measured by 2 factors: number of calls (first million a month are free), and payload.
 
 `getStatistics()` will return an object containing: # of calls, sent bytes and received bytes.
 
 Every module contains a `:statistics` DEBUG qualifier. To see this in action, specify `DEBUG=modulename:statistics` to get statistics from the main library or a test module, or specify `DEBUG=*:statistics` to get statistics from all modules.
 
-##Examples
+## Examples
 Look in the `/examples` folder for some code samples, as well as a config file sample.
 You can run each file on its own. The files make use of async to control flow, but it's not mandatory.
 
-##Tests
+## Tests
 
 Before you run tests, **you must provide your own user name and API key**. You can do it in one of 2 ways:
 
